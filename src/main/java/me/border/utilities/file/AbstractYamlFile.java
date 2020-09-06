@@ -11,10 +11,16 @@ public abstract class AbstractYamlFile {
 
     private String fileName;
     private File file;
+    private File path;
     public Map<String, Object> values = new HashMap<>();
 
-    public AbstractYamlFile(String fileName){
+    public AbstractYamlFile(String fileName, File path) {
         this.fileName = fileName;
+        this.path = path;
+        if (!path.exists()){
+            path.mkdirs();
+        }
+        this.file = new File(path, this.fileName + ".yml");
         Runtime.getRuntime().addShutdownHook(new Thread(this::save));
     }
 
@@ -61,10 +67,8 @@ public abstract class AbstractYamlFile {
 
     public void setup(){
         try {
-            File file = new File(this.fileName + ".yml");
             if (!file.exists())
                 file.createNewFile();
-            this.file = file;
             Yaml yaml = new Yaml();
             InputStream inputStream = new FileInputStream(file);
             Map<String, Object> o = yaml.loadAs(inputStream, Map.class);
