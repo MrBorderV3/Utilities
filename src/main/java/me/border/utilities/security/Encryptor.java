@@ -1,6 +1,7 @@
 package me.border.utilities.security;
 
 import javax.crypto.*;
+import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
@@ -20,6 +21,14 @@ public class Encryptor {
         } catch (NoSuchAlgorithmException e){
             e.printStackTrace();
         }
+    }
+
+    public Encryptor(byte[] key){
+        secretKey = new SecretKeySpec(key, "AES");
+    }
+
+    public Encryptor(SecretKey key){
+        this.secretKey = key;
     }
 
     public String encrypt(String str) {
