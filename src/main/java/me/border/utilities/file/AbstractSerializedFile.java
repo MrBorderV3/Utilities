@@ -6,7 +6,7 @@ public abstract class AbstractSerializedFile<I> {
 
     private File file;
     private File path;
-    public I item;
+    private I item;
 
     public AbstractSerializedFile(String file, File path, I item) {
         this.path = path;
@@ -62,5 +62,9 @@ public abstract class AbstractSerializedFile<I> {
 
     public I getItem(){
         return item;
+    }
+
+    public void setItem(I i){
+        this.item = i;
     }
 }
