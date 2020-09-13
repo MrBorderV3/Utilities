@@ -22,4 +22,14 @@ public interface Response<T> {
      * @return The context
      */
     T getContext();
+
+    /**
+     * Set the response's answer
+     */
+    void setAnswer();
+
+    /**
+     * Set the response's context
+     */
+    void setContext();
 }
