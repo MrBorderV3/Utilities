@@ -4,7 +4,7 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public abstract class AbstractYamlFile {
@@ -12,7 +12,7 @@ public abstract class AbstractYamlFile {
     private String fileName;
     private File file;
     private File path;
-    public Map<String, Object> values = new HashMap<>();
+    public Map<String, Object> values = new LinkedHashMap<>();
 
     public AbstractYamlFile(String fileName, File path) {
         this.fileName = fileName;
