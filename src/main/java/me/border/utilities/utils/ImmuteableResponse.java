@@ -34,12 +34,12 @@ public class ImmuteableResponse<T> implements Response<T> {
     }
 
     @Override
-    public void setAnswer() {
+    public void setAnswer(T t) {
         throw new UnsupportedOperationException("This response is immuteable and cannot be set");
     }
 
     @Override
-    public void setContext() {
+    public void setContext(boolean b) {
         throw new UnsupportedOperationException("This response is immuteable and cannot be set");
     }
 }

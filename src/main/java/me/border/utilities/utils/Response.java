@@ -26,10 +26,10 @@ public interface Response<T> {
     /**
      * Set the response's answer
      */
-    void setAnswer();
+    void setAnswer(boolean b);
 
     /**
      * Set the response's context
      */
-    void setContext();
+    void setContext(T t);
 }
