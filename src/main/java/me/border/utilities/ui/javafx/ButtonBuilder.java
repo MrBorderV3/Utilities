@@ -1,4 +1,4 @@
-package me.border.utilities.ui;
+package me.border.utilities.ui.javafx;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

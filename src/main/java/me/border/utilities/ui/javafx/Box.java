@@ -1,4 +1,4 @@
-package me.border.utilities.ui;
+package me.border.utilities.ui.javafx;
 
 import javafx.stage.Modality;
 import javafx.stage.Stage;

@@ -1,4 +1,4 @@
-package me.border.utilities.ui;
+package me.border.utilities.ui.javafx;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
