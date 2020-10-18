@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="320.0" style="-fx-background-color: #21242b;" stylesheets="@../style/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.border.utilities.ui.javafx.fxml.controllers.ConfirmBoxController">
+    <children>
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b4251" height="202.0" layoutX="14.0" layoutY="19.0" stroke="#434b5b" strokeType="INSIDE" width="293.0" />
+        <Label fx:id="ALERT_DETAILS" alignment="CENTER" layoutX="27.0" layoutY="32.0" prefHeight="109.0" prefWidth="267.0" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+            <font>
+                <Font name="Comic Sans MS" size="18.0" />
+            </font>
+        </Label>
+        <Button fx:id="hover_button" layoutX="27.0" layoutY="161.0" mnemonicParsing="false" onAction="#yes" prefHeight="48.0" prefWidth="117.0" style="-fx-background-radius: 24; -fx-border-color: #2ecc71; -fx-border-width: 3; -fx-border-radius: 24;" stylesheets="@../style/style.css" text="Yes" textFill="WHITE">
+            <font>
+                <Font name="Comic Sans MS" size="12.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </Button>
+      <Button fx:id="hover_button" layoutX="177.0" layoutY="161.0" mnemonicParsing="false" onAction="#no" prefHeight="48.0" prefWidth="117.0" style="-fx-background-radius: 24; -fx-border-color: #2ecc71; -fx-border-width: 3; -fx-border-radius: 24;" stylesheets="@../style/style.css" text="No" textFill="WHITE">
+         <font>
+            <Font name="Comic Sans MS" size="12.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+    </children>
+</AnchorPane>

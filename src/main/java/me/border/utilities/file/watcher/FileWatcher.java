@@ -15,6 +15,7 @@ public class FileWatcher implements Runnable {
 
     private List<FileListener> listeners = new ArrayList<>();
 
+    private volatile boolean stopped = false;
     private File dir;
 
     public FileWatcher(File dir) {
@@ -23,6 +24,8 @@ public class FileWatcher implements Runnable {
 
     public void watch() {
         if (dir.exists()) {
+            if (stopped)
+                stopped = false;
             Thread thread = new Thread(this);
             thread.setDaemon(true);
             thread.start();
@@ -31,16 +34,18 @@ public class FileWatcher implements Runnable {
 
     @Override
     public void run() {
-        try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
-            Path path = Paths.get(dir.getAbsolutePath());
-            path.register(watchService, ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE);
-            watchServices.add(watchService);
-            boolean poll = true;
-            while (poll) {
-                poll = pollEvents(watchService);
+        while (!stopped) {
+            try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
+                Path path = Paths.get(dir.getAbsolutePath());
+                path.register(watchService, ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE);
+                watchServices.add(watchService);
+                boolean poll = true;
+                while (poll) {
+                    poll = pollEvents(watchService);
+                }
+            } catch (IOException | InterruptedException | ClosedWatchServiceException e) {
+                Thread.currentThread().interrupt();
             }
-        } catch (IOException | InterruptedException | ClosedWatchServiceException e) {
-            Thread.currentThread().interrupt();
         }
     }
 
@@ -89,6 +94,11 @@ public class FileWatcher implements Runnable {
 
     public void setListeners(List<FileListener> listeners) {
         this.listeners = listeners;
+    }
+
+    public void stop(){
+        listeners.clear();
+        stopped = true;
     }
 
     public static List<WatchService> getWatchServices() {

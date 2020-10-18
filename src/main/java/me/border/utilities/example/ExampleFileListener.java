@@ -3,6 +3,7 @@ package me.border.utilities.example;
 import me.border.utilities.file.watcher.FileEvent;
 import me.border.utilities.file.watcher.FileListener;
 import me.border.utilities.file.watcher.FileWatcher;
+import me.border.utilities.utils.AsyncScheduler;
 
 import java.io.File;
 

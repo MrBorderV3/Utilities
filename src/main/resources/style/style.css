@@ -1,0 +1,43 @@
+#hover_button {
+  -fx-padding: 15px 30px;
+  -fx-color: #fff;
+  -fx-text-transform: uppercase;
+  -fx-text-decoration: none;
+  -fx-overflow: hidden;
+  -fx-transition: .2s;
+}
+
+#hover_button{
+  -fx-background-color:  transparent;
+}
+
+#hover_button:hover{
+ -fx-background-color:  #2ecc71;
+}
+
+#close_button, #minimize_button{
+  -fx-opacity: 1;
+}
+
+#close_button:hover, #minimize_button:hover{
+  -fx-opacity: 1;
+}
+
+.textfield{
+    -fx-text-inner-color: white;
+    -fx-pref-width: 250;
+}
+
+.textfield:focused{
+    -fx-font-color: white;
+    -fx-max-width: 350;
+}
+
+#topTray_back{
+    -fx-opacity: 0;
+}
+
+#topTray_back:hover{
+    -fx-opacity: 0.36;
+}
+
