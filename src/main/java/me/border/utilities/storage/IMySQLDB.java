@@ -35,9 +35,7 @@ public abstract class IMySQLDB {
     public ResultSet executeQuery(String sql) {
         try {
             Statement statement = connection.createStatement();
-            ResultSet query = statement.executeQuery(sql);
-            statement.close();
-            return query;
+            return statement.executeQuery(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -48,9 +46,7 @@ public abstract class IMySQLDB {
     // MUST BE RUN IN AN ASYNC TASK
     public ResultSet executeQuery(PreparedStatement ps){
         try {
-            ResultSet query = ps.executeQuery();
-            ps.close();
-            return query;
+            return ps.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
         }

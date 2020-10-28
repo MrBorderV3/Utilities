@@ -58,7 +58,10 @@ public abstract class AbstractCache<K> implements ICache<K> {
     // Get a parsed object from the cache with the corresponding key
     @Override
     public Object getParsedCache(K key) {
-        return getCache(key).getObject();
+        Cacheable cacheable = getCache(key);
+        if (cacheable == null)
+            return null;
+        return cacheable.getObject();
     }
 
     // Delete an object from the cache with the corresponding key
