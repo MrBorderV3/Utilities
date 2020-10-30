@@ -9,7 +9,7 @@ import java.io.File;
 
 public class ExampleFileListener {
 
-    public ExampleFileListener(File dir){
+    private ExampleFileListener(File dir){
         FileWatcher watcher = new FileWatcher(dir);
         watcher.addListener(new FileListener() {
             @Override

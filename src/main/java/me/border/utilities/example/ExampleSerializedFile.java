@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class ExampleSerializedFile extends AbstractSerializedFile<HashMap<String, String>> {
 
-    protected ExampleSerializedFile() {
+    private ExampleSerializedFile() {
         super("example", new File("/data"), new HashMap<>());
     }
 }
