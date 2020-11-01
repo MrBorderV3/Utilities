@@ -1,6 +1,7 @@
-package me.border.utilities.communication.udp.core;
+package me.border.utilities.communication.udp.core.connection;
 
 import me.border.utilities.communication.base.connection.ServerConnection;
+import me.border.utilities.communication.udp.core.UDPCommunicationException;
 
 public interface UDPServerConnection extends ServerConnection {
 
