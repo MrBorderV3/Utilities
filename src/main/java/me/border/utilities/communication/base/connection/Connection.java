@@ -12,7 +12,7 @@ import me.border.utilities.communication.base.Server;
  * @see Client
  * @see Server
  */
-interface Connection extends Runnable {
+public interface Connection extends Runnable {
 
     /**
      * Send an object to the socket represented by this connection.

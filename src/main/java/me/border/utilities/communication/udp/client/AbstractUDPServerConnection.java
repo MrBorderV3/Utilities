@@ -1,7 +1,7 @@
 package me.border.utilities.communication.udp.client;
 
-import me.border.utilities.communication.udp.core.connection.UDPServerConnection;
+import me.border.utilities.communication.udp.core.UDPConnection;
 
-public abstract class AbstractUDPServerConnection implements UDPServerConnection {
+public abstract class AbstractUDPServerConnection implements UDPConnection {
 
 }

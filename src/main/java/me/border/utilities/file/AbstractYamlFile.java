@@ -36,7 +36,7 @@ public abstract class AbstractYamlFile {
         return (int) get(path);
     }
 
-    private <T> T getAs(String path){
+    public <T> T getAs(String path){
         return (T) get(path);
     }
 

@@ -1,22 +1,22 @@
 package me.border.utilities.communication.base;
 
-import me.border.utilities.communication.base.connection.ClientConnection;
+import me.border.utilities.communication.base.connection.Connection;
 import me.border.utilities.communication.base.exception.CommunicationException;
 
 /**
  * The class {@code Server} is a base class of a server in a two-way Server-Client communication
  */
-public interface Server<T extends ClientConnection> {
+public interface Server<T extends Connection> {
 
     /**
      * Shortcut for {@link #start(Class)} to be implemented with the class type of the implementation
-     * of {@link ClientConnection} in the project.
+     * of {@link Connection} in the project.
      */
     void start();
 
     /**
-     * Start the server and once a client connects construct a connection {@link ClientConnection}
-     * With the given class type (Must extend {@link ClientConnection})
+     * Start the server and once a client connects construct a connection {@link Connection}
+     * With the given class type (Must extend {@link Connection})
      *
      * @param clazz The class of the connection
      */
@@ -28,7 +28,7 @@ public interface Server<T extends ClientConnection> {
      * @param object The object to send
      * @throws CommunicationException If an exception occurs during the sending to one of the clients
      *
-     * @see ClientConnection#sendObject(Object)
+     * @see Connection#sendObject(Object)
      */
     void sendAllClients(Object object) throws CommunicationException;
 }
