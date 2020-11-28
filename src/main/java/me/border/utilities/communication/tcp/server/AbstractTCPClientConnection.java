@@ -1,7 +1,8 @@
 package me.border.utilities.communication.tcp.server;
 
-import me.border.utilities.communication.tcp.core.TCPConnection;
 import me.border.utilities.communication.tcp.core.TCPCommunicationException;
+import me.border.utilities.communication.tcp.core.base.TCPClientConnection;
+import me.border.utilities.communication.tcp.core.base.TCPServerConnection;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,12 +13,16 @@ import java.net.Socket;
 /**
  * The class {@code AbstractTCPClientConnection} represents a socket connection to a client from a server
  *
- * @see TCPConnection
+ * @see TCPServerConnection
  */
-public abstract class AbstractTCPClientConnection implements TCPConnection {
+public abstract class AbstractTCPClientConnection implements TCPClientConnection {
 
     protected Socket client;
+
+    // INPUT STREAM TO RECEIVE DATA FROM THE CLIENT
     protected ObjectInputStream oin;
+
+    // OUTPUT STREAM TO SEND DATA TO THE CLIENT
     protected ObjectOutputStream oout;
 
     public AbstractTCPClientConnection(Socket clientSocket) throws IOException {

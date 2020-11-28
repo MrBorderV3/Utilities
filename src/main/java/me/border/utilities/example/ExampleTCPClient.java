@@ -1,32 +1,41 @@
 package me.border.utilities.example;
 
-import me.border.utilities.communication.tcp.client.AbstractTCPClient;
-import me.border.utilities.communication.tcp.client.AbstractTCPServerConnection;
+import me.border.utilities.communication.base.exception.BuilderException;
+import me.border.utilities.communication.base.exception.CommunicationException;
+import me.border.utilities.communication.tcp.core.TCPClient;
+import me.border.utilities.communication.tcp.impl.client.ServerConnectionRunnable;
+import me.border.utilities.communication.tcp.impl.client.TCPClientBuilder;
 
 import java.io.IOException;
-import java.net.Socket;
 
-public class ExampleTCPClient extends AbstractTCPClient {
+public class ExampleTCPClient {
 
-    public ExampleTCPClient() {
-        super("104.238.158.11", 9090);
-        start();
+    private TCPClient client;
+
+    private ExampleTCPClient(String ip, int port) {
+        try {
+            client = new TCPClientBuilder().setIp(ip).setPort(port).setRunnable(new ServerConnectionRunnable() {
+                @Override
+                public void run() {
+                    try {
+                        getConnection().sendObject("Example");
+                    } catch (CommunicationException e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }).build();
+        } catch (BuilderException ex) {
+            ex.printStackTrace();
+        }
     }
 
-    @Override
-    public void start() {
-        super.start(ServerTCPConnection.class);
-    }
-
-    public static class ServerTCPConnection extends AbstractTCPServerConnection {
-
-        public ServerTCPConnection(Socket server) throws IOException {
-            super(server);
-        }
-
-        @Override
-        public void run() {
-
-        }
+    public void start(){
+        client.start();
     }
 }

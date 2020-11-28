@@ -1,16 +1,13 @@
-package me.border.utilities.communication.base.connection;
+package me.border.utilities.communication.base;
 
-import me.border.utilities.communication.base.Client;
 import me.border.utilities.communication.base.exception.CommunicationException;
-import me.border.utilities.communication.base.Server;
+
+import java.net.Socket;
 
 /**
  * The class {@code Connection} presents a core form of a connection to either a Server or a Client in either TCP or UDP
  * The class must be ran on a different thread that is in charge of handling all the communication
  * between the current socket to the socket represented by this class
- *
- * @see Client
- * @see Server
  */
 public interface Connection extends Runnable {
 
@@ -23,4 +20,11 @@ public interface Connection extends Runnable {
      * The exception will also be thrown if {@param object} is not serializable.
      */
     void sendObject(Object object) throws CommunicationException;
+
+    /**
+     * Get the socket associated with this connection.
+     *
+     * @return The socket.
+     */
+    Socket getSocket();
 }

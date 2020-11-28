@@ -1,7 +1,9 @@
 package me.border.utilities.communication.tcp.server;
 
-import me.border.utilities.communication.base.Server;
+import me.border.utilities.communication.base.build.ConnectionFactory;
+import me.border.utilities.communication.tcp.core.TCPServer;
 import me.border.utilities.communication.tcp.core.TCPCommunicationException;
+import me.border.utilities.communication.tcp.core.base.TCPClientConnection;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -14,15 +16,17 @@ import java.util.concurrent.Executors;
 /**
  * The class {@code AbstractTCPServer} is an abstract class of a TCP server in a two-way Server-Client communication
  */
-public abstract class AbstractTCPServer implements Server<AbstractTCPClientConnection> {
+public abstract class AbstractTCPServer implements TCPServer {
 
-    public Set<AbstractTCPClientConnection> clientConnections = new HashSet<>();
+    public Set<TCPClientConnection> clientConnections = new HashSet<>();
 
+    private int port;
     private ServerSocket ss;
     private ExecutorService pool;
 
     private AbstractTCPServer(int port) {
         try {
+            this.port = port;
             this.ss = new ServerSocket(port);
         } catch (IOException e){
             e.printStackTrace();
@@ -39,18 +43,31 @@ public abstract class AbstractTCPServer implements Server<AbstractTCPClientConne
         this.pool = Executors.newFixedThreadPool(pool);
     }
 
-    @Override
-    public abstract void start();
-
-    @Override
-    public void start(Class<? extends AbstractTCPClientConnection> clazz) {
+    protected void start(ConnectionFactory<TCPClientConnection> factory){
         try {
             while (true) {
-                System.out.println("Listening on port 9090");
+                System.out.println("Listening on port " + port);
                 // WAITS UNTIL IT GETS A CONNECTION
                 Socket socket = ss.accept();
                 System.out.println("Successfully connected to client at " + socket.getInetAddress().getHostAddress());
-                AbstractTCPClientConnection clientConnection = clazz.getConstructor(Socket.class).newInstance(socket);
+                TCPClientConnection clientConnection = factory.constructConn(socket);
+                clientConnections.add(clientConnection);
+
+                pool.execute(clientConnection);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    protected void start(Class<? extends TCPClientConnection> clazz) {
+        try {
+            while (true) {
+                System.out.println("Listening on port " + port);
+                // WAITS UNTIL IT GETS A CONNECTION
+                Socket socket = ss.accept();
+                System.out.println("Successfully connected to client at " + socket.getInetAddress().getHostAddress());
+                TCPClientConnection clientConnection = clazz.getConstructor(Socket.class).newInstance(socket);
                 clientConnections.add(clientConnection);
 
                 pool.execute(clientConnection);
@@ -62,8 +79,13 @@ public abstract class AbstractTCPServer implements Server<AbstractTCPClientConne
 
     @Override
     public void sendAllClients(Object o) throws TCPCommunicationException {
-        for (AbstractTCPClientConnection clientConnection : clientConnections) {
+        for (TCPClientConnection clientConnection : clientConnections) {
             clientConnection.sendObject(o);
         }
+    }
+
+    @Override
+    public Set<TCPClientConnection> getConnections(){
+        return clientConnections;
     }
 }

@@ -1,9 +1,12 @@
-package me.border.utilities.communication.tcp.core;
+package me.border.utilities.communication.tcp.core.base;
 
-import me.border.utilities.communication.base.connection.Connection;
+import me.border.utilities.communication.base.Connection;
+import me.border.utilities.communication.tcp.core.TCPCommunicationException;
 
-
-public interface TCPConnection extends Connection {
+/**
+ * Represents a TCP connection to either a server or a client socket.
+ */
+interface TCPConnection extends Connection {
 
     /**
      * Send an object to the socket represented by this connection.
