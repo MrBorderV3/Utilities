@@ -4,10 +4,7 @@ import me.border.utilities.communication.tcp.core.TCPCommunicationException;
 import me.border.utilities.communication.tcp.core.base.TCPClientConnection;
 import me.border.utilities.communication.tcp.core.base.TCPServerConnection;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -17,30 +14,42 @@ import java.net.Socket;
  */
 public abstract class AbstractTCPClientConnection implements TCPClientConnection {
 
-    protected Socket client;
+    protected final Socket socket;
 
     // INPUT STREAM TO RECEIVE DATA FROM THE CLIENT
-    protected ObjectInputStream oin;
+    protected final InputStream in;
 
     // OUTPUT STREAM TO SEND DATA TO THE CLIENT
-    protected ObjectOutputStream oout;
+    protected final OutputStream out;
 
     public AbstractTCPClientConnection(Socket clientSocket) throws IOException {
-        this.client = clientSocket;
-        oout = new ObjectOutputStream(client.getOutputStream());
-        oin = new ObjectInputStream(client.getInputStream());
+        this.socket = clientSocket;
+        out = socket.getOutputStream();
+        in = socket.getInputStream();
     }
 
     @Override
     public void sendObject(Object o) throws TCPCommunicationException {
         if (!(o instanceof Serializable)){
-            throw new TCPCommunicationException(client, "Object [" + o.toString() + "] is not serializable and cannot be sent!");
+            throw new TCPCommunicationException(socket, "Object [" + o.toString() + "] is not serializable and cannot be sent!");
         }
-        try {
+        try (ObjectOutputStream oout = new ObjectOutputStream(out)){
             oout.writeObject(o);
             oout.flush();
         } catch (IOException e){
-            throw new TCPCommunicationException(client, e);
+            throw new TCPCommunicationException(socket, e);
         }
+    }
+
+    @Override
+    public Socket getSocket() {
+        return socket;
+    }
+
+    @Override
+    public void close() throws IOException {
+        in.close();
+        out.close();
+        socket.close();
     }
 }

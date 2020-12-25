@@ -3,6 +3,9 @@ package me.border.utilities.communication.tcp.core.base;
 import me.border.utilities.communication.base.Connection;
 import me.border.utilities.communication.tcp.core.TCPCommunicationException;
 
+import java.io.IOException;
+import java.net.Socket;
+
 /**
  * Represents a TCP connection to either a server or a client socket.
  */
@@ -18,4 +21,16 @@ interface TCPConnection extends Connection {
      */
     @Override
     void sendObject(Object object) throws TCPCommunicationException;
+
+    /**
+     * Get the socket associated with this connection.
+     *
+     * @return The socket.
+     */
+    Socket getSocket();
+
+    /**
+     * Close this connection
+     */
+    void close() throws IOException;
 }

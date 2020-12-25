@@ -55,4 +55,11 @@ public class TCPClientConnectionImpl implements TCPClientConnection {
     public Socket getSocket() {
         return client;
     }
+
+    @Override
+    public void close() throws IOException{
+        in.close();
+        out.close();
+        client.close();
+    }
 }

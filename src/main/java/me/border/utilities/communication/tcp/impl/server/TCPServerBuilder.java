@@ -2,9 +2,7 @@ package me.border.utilities.communication.tcp.impl.server;
 
 import me.border.utilities.communication.base.build.Builder;
 import me.border.utilities.communication.base.exception.BuilderException;
-import me.border.utilities.communication.base.build.ConnectionFactory;
 import me.border.utilities.communication.tcp.core.TCPServer;
-import me.border.utilities.communication.tcp.core.base.TCPClientConnection;
 
 import java.io.*;
 import java.util.concurrent.ExecutorService;
@@ -55,7 +53,7 @@ public class TCPServerBuilder implements Builder<TCPServer> {
             pool = Executors.newFixedThreadPool(1);
         }
         try {
-            ConnectionFactory<TCPClientConnection> factory = new TCPClientConnectionFactory(runnable);
+            TCPClientConnectionFactory factory = new TCPClientConnectionFactory(runnable);
             return new TCPServerImpl(port, factory, pool);
         } catch (IOException e) {
             throw new BuilderException("An error has occurred during the construction of the server.", e);

@@ -24,12 +24,12 @@ public class ExampleTCPServerV2 extends AbstractTCPServer {
 
         @Override
         public void run() {
-            System.out.println("I RAN MF\n" + client.toString());
+            System.out.println("I RAN MF\n" + socket.toString());
         }
 
         @Override
         public Socket getSocket() {
-            return client;
+            return socket;
         }
     }
 }

@@ -10,7 +10,7 @@ public abstract class AbstractCache<K> implements ICache<K> {
     public AbstractCache(int sleepTime){
         try {
             Thread threadCleanerUpper = new Thread(new Runnable() {
-                int milliSecondSleepTime = sleepTime;
+                final int milliSecondSleepTime = sleepTime;
                 public void run() {
                     try {
                         while (true) {

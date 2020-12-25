@@ -28,7 +28,6 @@ public abstract class IMySQLDB {
                 ping();
             }
         }, 7200000, 7200000);
-
     }
 
     // MUST BE RUN IN AN ASYNC TASK

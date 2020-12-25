@@ -3,10 +3,7 @@ package me.border.utilities.communication.tcp.client;
 import me.border.utilities.communication.tcp.core.TCPCommunicationException;
 import me.border.utilities.communication.tcp.core.base.TCPServerConnection;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -15,14 +12,14 @@ import java.net.Socket;
  * @see TCPServerConnection
  */
 public abstract class AbstractTCPServerConnection implements TCPServerConnection {
-    protected Socket server;
-    protected ObjectOutputStream oout;
-    protected ObjectInputStream oin;
+    protected final Socket server;
+    protected final OutputStream out;
+    protected final InputStream in;
 
     public AbstractTCPServerConnection(Socket server) throws IOException {
         this.server = server;
-        oout = new ObjectOutputStream(server.getOutputStream());
-        oin = new ObjectInputStream(server.getInputStream());
+        out = server.getOutputStream();
+        in = server.getInputStream();
     }
 
     @Override
@@ -30,7 +27,7 @@ public abstract class AbstractTCPServerConnection implements TCPServerConnection
         if (!(o instanceof Serializable)){
             throw new TCPCommunicationException(server, "Object [" + o.toString() + "] is not serializable and cannot be sent!");
         }
-        try {
+        try (ObjectOutputStream oout = new ObjectOutputStream(out)){
             oout.writeObject(o);
             oout.flush();
         } catch (IOException e) {
@@ -38,9 +35,15 @@ public abstract class AbstractTCPServerConnection implements TCPServerConnection
         }
     }
 
-
     @Override
     public Socket getSocket() {
         return server;
+    }
+
+    @Override
+    public void close() throws IOException {
+        in.close();
+        out.close();
+        server.close();
     }
 }

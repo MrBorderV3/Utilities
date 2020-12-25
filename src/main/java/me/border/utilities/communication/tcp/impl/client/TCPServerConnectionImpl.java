@@ -54,4 +54,11 @@ public class TCPServerConnectionImpl implements TCPServerConnection {
     public Socket getSocket() {
         return server;
     }
+
+    @Override
+    public void close() throws IOException {
+        in.close();
+        out.close();
+        server.close();
+    }
 }

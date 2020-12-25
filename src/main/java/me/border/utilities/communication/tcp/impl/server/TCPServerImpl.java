@@ -1,6 +1,5 @@
 package me.border.utilities.communication.tcp.impl.server;
 
-import me.border.utilities.communication.base.build.ConnectionFactory;
 import me.border.utilities.communication.tcp.core.TCPServer;
 import me.border.utilities.communication.tcp.core.TCPCommunicationException;
 import me.border.utilities.communication.tcp.core.base.TCPClientConnection;
@@ -16,20 +15,20 @@ public class TCPServerImpl implements TCPServer {
 
     public Set<TCPClientConnection> clientConnections = new HashSet<>();
 
-    private final ConnectionFactory<TCPClientConnection> factory;
+    private final TCPClientConnectionFactory factory;
 
     private final int port;
     private final ServerSocket ss;
     private ExecutorService pool;
 
-    private TCPServerImpl(int port, ConnectionFactory<TCPClientConnection> factory) throws IOException {
+    private TCPServerImpl(int port, TCPClientConnectionFactory factory) throws IOException {
         this.port = port;
         this.ss = new ServerSocket(port);
         this.factory = factory;
-        ((TCPClientConnectionFactory) factory).setServer(this);
+        factory.setServer(this);
     }
 
-    protected TCPServerImpl(int port, ConnectionFactory<TCPClientConnection> factory, ExecutorService pool) throws IOException {
+    protected TCPServerImpl(int port, TCPClientConnectionFactory factory, ExecutorService pool) throws IOException {
         this(port, factory);
         this.pool = pool;
     }
