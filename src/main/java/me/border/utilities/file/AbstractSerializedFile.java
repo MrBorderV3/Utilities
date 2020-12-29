@@ -1,14 +1,19 @@
 package me.border.utilities.file;
 
 import java.io.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class AbstractSerializedFile<I> {
+
+    private static final Set<AbstractSerializedFile<?>> files = new HashSet<>();
 
     private File file;
     private File path;
     private I item;
 
     public AbstractSerializedFile(String file, File path, I item) {
+        files.add(this);
         this.path = path;
         this.file = new File(path, file + ".dat");
         this.item = item;
@@ -66,5 +71,13 @@ public abstract class AbstractSerializedFile<I> {
 
     public void setItem(I i){
         this.item = i;
+    }
+
+    public static void setupAll(){
+        files.forEach(AbstractSerializedFile::setup);
+    }
+
+    public static void saveAll(){
+        files.forEach(AbstractSerializedFile::save);
     }
 }
