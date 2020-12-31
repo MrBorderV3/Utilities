@@ -2,6 +2,14 @@ package me.border.utilities.utils;
 
 public interface Response<T> {
 
+    public static <T> ImmuteableResponse<T> createImmuteable(boolean answer){
+        return new ImmuteableResponse<>(answer);
+    }
+
+    public static <T> ImmuteableResponse<T> createImmuteable(boolean answer, T context){
+        return new ImmuteableResponse<>(answer, context);
+    }
+
     /**
      * Get the answer attached to the response
      *

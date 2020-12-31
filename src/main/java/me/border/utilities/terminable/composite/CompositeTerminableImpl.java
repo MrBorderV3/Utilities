@@ -11,22 +11,22 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class CompositeTerminableImpl implements CompositeTerminable {
     private boolean closed = false;
-    private final Deque<Terminable> closeables = new ConcurrentLinkedDeque<>();
+    private final Deque<AutoCloseable> closeables = new ConcurrentLinkedDeque<>();
 
     protected CompositeTerminableImpl() {
     }
 
     @Override
-    public CompositeTerminable with(Terminable terminable) {
-        Objects.requireNonNull(terminable, "terminable");
-        this.closeables.push(terminable);
+    public CompositeTerminable with(AutoCloseable closeable) {
+        Objects.requireNonNull(closeable, "closeable");
+        this.closeables.push(closeable);
         return this;
     }
 
     @Override
     public void close() throws CompositeClosingException {
         List<Exception> caught = new ArrayList<>();
-        for (Terminable ac; (ac = this.closeables.poll()) != null; ) {
+        for (AutoCloseable ac; (ac = this.closeables.poll()) != null; ) {
             try {
                 ac.close();
             } catch (Exception e) {
@@ -51,7 +51,10 @@ public class CompositeTerminableImpl implements CompositeTerminable {
             if (ac instanceof CompositeTerminable) {
                 ((CompositeTerminable) ac).cleanup();
             }
-            return ac.isClosed();
+            if (ac instanceof Terminable) {
+                return ((Terminable) ac).isClosed();
+            }
+            return false;
         });
     }
 }

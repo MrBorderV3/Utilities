@@ -3,6 +3,11 @@ package me.border.utilities.terminable.composite;
 import me.border.utilities.terminable.Terminable;
 import me.border.utilities.terminable.exception.CompositeClosingException;
 
+/**
+ * Represents a {@link Terminable} made up of several other {@link AutoCloseable}s.
+ *
+ * The {@link #close()} method closes in LIFO (Last-In-First-Out) order.
+ */
 public interface CompositeTerminable extends Terminable {
     /**
      * Creates a new standalone {@link CompositeTerminable}.
@@ -16,8 +21,7 @@ public interface CompositeTerminable extends Terminable {
     /**
      * Closes this composite terminable.
      *
-     * @throws CompositeClosingException if any of the sub-terminables throw an
-     *                                   exception on close
+     * @throws CompositeClosingException if any of the sub-terminables throw a exception on close
      */
     @Override
     void close() throws CompositeClosingException;
@@ -32,65 +36,72 @@ public interface CompositeTerminable extends Terminable {
     }
 
     /**
-     * Binds an {@link Terminable} with this composite terminable.
+     * Binds an {@link AutoCloseable} with this composite terminable.
      *
-     * <p>Note that implementations do not keep track of duplicate contained
-     * terminables. If a single {@link Terminable} is added twice, it will be
-     * {@link Terminable#close() closed} twice.</p>
+     * Note that implementations do not keep track of duplicate contained
+     * closeables. If a single {@link AutoCloseable} is added twice, it will be
+     * {@link #close() closed} twice.
      *
-     * @param terminable the terminable to bind
+     * @param closeable the terminable to bind
+     * @return this (for chaining)
+     */
+    CompositeTerminable with(AutoCloseable closeable);
+
+    /**
+     * Binds all given {@link AutoCloseable} with this composite terminable.
+     *
+     * Note that implementations do not keep track of duplicate contained
+     * closeables. If a single {@link AutoCloseable} is added twice, it will be
+     * {@link AutoCloseable#close() closed} twice.
+     *
+     * Ignores null values.
+     *
+     * @param closeables the closeables to bind
+     * @return this (for chaining)
+     */
+    default CompositeTerminable withAll(AutoCloseable... closeables) {
+        for (AutoCloseable closeable : closeables) {
+            if (closeable == null) {
+                continue;
+            }
+            bind(closeable);
+        }
+        return this;
+    }
+
+    /**
+     * Binds all given {@link AutoCloseable} with this composite terminable.
+     *
+     * Note that implementations do not keep track of duplicate contained
+     * closeables. If a single {@link AutoCloseable} is added twice, it will be
+     * {@link #close() closed} twice.
+     *
+     * Ignores null values.
+     *
+     * @param closeables the closeables to bind
+     * @return this (for chaining)
+     */
+    default CompositeTerminable withAll(Iterable<? extends AutoCloseable> closeables) {
+        for (AutoCloseable closeable : closeables) {
+            if (closeable == null) {
+                continue;
+            }
+            bind(closeable);
+        }
+        return this;
+    }
+
+    /**
+     * Binds an {@link AutoCloseable} with this composite terminable.
+     * @see #with(AutoCloseable)
+     *
+     * @param closeable the terminable to bind
      * @throws NullPointerException if the terminable is null
-     * @return this (for chaining)
+     * @return The closeable
      */
-    CompositeTerminable with(Terminable terminable);
-
-    /**
-     * Binds all given {@link Terminable} with this composite terminable.
-     *
-     * <p>Note that implementations do not keep track of duplicate contained
-     * terminables. If a single {@link Terminable} is added twice, it will be
-     * {@link Terminable#close() closed} twice.</p>
-     *
-     * <p>Ignores null values.</p>
-     *
-     * @param terminables the terminables to bind
-     * @return this (for chaining)
-     */
-    default CompositeTerminable withAll(Terminable... terminables) {
-        for (Terminable terminable : terminables) {
-            if (terminable == null) {
-                continue;
-            }
-            bind(terminable);
-        }
-        return this;
-    }
-
-    /**
-     * Binds all given {@link Terminable} with this composite terminable.
-     *
-     * <p>Note that implementations do not keep track of duplicate contained
-     * terminables. If a single {@link Terminable} is added twice, it will be
-     * {@link Terminable#close() closed} twice.</p>
-     *
-     * <p>Ignores null values.</p>
-     *
-     * @param terminables the terminables to bind
-     * @return this (for chaining)
-     */
-    default CompositeTerminable withAll(Iterable<? extends Terminable> terminables) {
-        for (Terminable terminable : terminables) {
-            if (terminable == null) {
-                continue;
-            }
-            bind(terminable);
-        }
-        return this;
-    }
-
-    default <T extends Terminable> T bind(T terminable) {
-        with(terminable);
-        return terminable;
+    default <T extends AutoCloseable> T bind(T closeable) {
+        with(closeable);
+        return closeable;
     }
 
     /**

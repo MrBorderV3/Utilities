@@ -9,7 +9,7 @@ public abstract class AbstractCache<K> implements ICache<K> {
     // START THE CLEANUP THREAD AND RUN IT EVERY CHOSEN TIME.
     public AbstractCache(int sleepTime){
         try {
-            Thread threadCleanerUpper = new Thread(new Runnable() {
+            Thread cleanUpThread = new Thread(new Runnable() {
                 final int milliSecondSleepTime = sleepTime;
                 public void run() {
                     try {
@@ -28,8 +28,9 @@ public abstract class AbstractCache<K> implements ICache<K> {
                     }
                 }
             });
-            threadCleanerUpper.setPriority(Thread.MIN_PRIORITY);
-            threadCleanerUpper.start();
+            cleanUpThread.setDaemon(true);
+            cleanUpThread.setPriority(Thread.MIN_PRIORITY);
+            cleanUpThread.start();
         } catch (Exception e) {
             e.printStackTrace();
         }

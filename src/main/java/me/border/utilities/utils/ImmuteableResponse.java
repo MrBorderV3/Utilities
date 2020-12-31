@@ -2,15 +2,15 @@ package me.border.utilities.utils;
 
 public class ImmuteableResponse<T> implements Response<T> {
 
-    private boolean answer;
+    private final boolean answer;
     private boolean hasContext = false;
     private T context;
 
-    public ImmuteableResponse(boolean answer){
+    ImmuteableResponse(boolean answer){
         this.answer = answer;
     }
 
-    public ImmuteableResponse(boolean answer, T context){
+    ImmuteableResponse(boolean answer, T context){
         this(answer);
         if (context == null)
             throw new NullPointerException("Response cannot have null context");

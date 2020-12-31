@@ -1,10 +1,13 @@
 package me.border.utilities.storage;
 
+import me.border.utilities.terminable.Terminable;
+import me.border.utilities.terminable.exception.TerminableClosedException;
+
 import java.sql.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public abstract class IMySQLDB {
+public abstract class IMySQLDB implements Terminable {
 
     protected Connection connection;
 
@@ -112,17 +115,34 @@ public abstract class IMySQLDB {
         }
     }
 
-    private void close() {
+    @Override
+    public void close() {
         try {
-            if (connection != null && !connection.isClosed())
+            if (connection != null && !isClosed())
                 connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    public boolean isClosed() {
+        try {
+            return connection.isClosed();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     private void ping() {
         executeQuery("/* ping */ SELECT 1;");
+    }
+
+    private void validate() throws TerminableClosedException {
+        if (isClosed())
+            throw new TerminableClosedException();
     }
 
     private void open() {
@@ -134,4 +154,5 @@ public abstract class IMySQLDB {
             e.printStackTrace();
         }
     }
+
 }
