@@ -2,6 +2,7 @@ package me.border.utilities.terminable.composite;
 
 import me.border.utilities.terminable.Terminable;
 import me.border.utilities.terminable.exception.CompositeClosingException;
+import me.border.utilities.terminable.exception.TerminableClosedException;
 
 import java.util.ArrayList;
 import java.util.Deque;
@@ -17,7 +18,9 @@ public class CompositeTerminableImpl implements CompositeTerminable {
     }
 
     @Override
-    public CompositeTerminable with(AutoCloseable closeable) {
+    public CompositeTerminable with(AutoCloseable closeable) throws TerminableClosedException {
+        if (isClosed())
+            throw new TerminableClosedException();
         Objects.requireNonNull(closeable, "closeable");
         this.closeables.push(closeable);
         return this;
@@ -26,7 +29,9 @@ public class CompositeTerminableImpl implements CompositeTerminable {
     @Override
     public void close() throws CompositeClosingException {
         List<Exception> caught = new ArrayList<>();
-        for (AutoCloseable ac; (ac = this.closeables.poll()) != null; ) {
+        for (AutoCloseable ac : closeables) {
+            if (ac == null)
+                continue;
             try {
                 ac.close();
             } catch (Exception e) {
@@ -54,6 +59,7 @@ public class CompositeTerminableImpl implements CompositeTerminable {
             if (ac instanceof Terminable) {
                 return ((Terminable) ac).isClosed();
             }
+
             return false;
         });
     }
