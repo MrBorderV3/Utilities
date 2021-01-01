@@ -1,4 +1,6 @@
-package me.border.utilities.utils;
+package me.border.utilities.response;
+
+import java.util.Objects;
 
 public class ImmuteableResponse<T> implements Response<T> {
 
@@ -12,10 +14,9 @@ public class ImmuteableResponse<T> implements Response<T> {
 
     ImmuteableResponse(boolean answer, T context){
         this(answer);
-        if (context == null)
-            throw new NullPointerException("Response cannot have null context");
-        hasContext = true;
+        Objects.requireNonNull(context, "Context cannot be null");
         this.context = context;
+        hasContext = true;
     }
 
     @Override

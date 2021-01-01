@@ -1,5 +1,8 @@
-package me.border.utilities.file.watcher;
+package me.border.utilities.filewatcher;
 
+/**
+ * Adapter for {@link FileListener}
+ */
 public abstract class FileAdapter implements FileListener {
 
     @Override

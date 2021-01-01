@@ -8,8 +8,8 @@ public abstract class AbstractSerializedFile<I> {
 
     private static final Set<AbstractSerializedFile<?>> files = new HashSet<>();
 
-    private File file;
-    private File path;
+    private final File file;
+    private final File path;
     private I item;
 
     public AbstractSerializedFile(String file, File path, I item) {

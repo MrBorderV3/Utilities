@@ -1,8 +1,8 @@
 package me.border.utilities.example;
 
-import me.border.utilities.file.watcher.FileEvent;
-import me.border.utilities.file.watcher.FileListener;
-import me.border.utilities.file.watcher.FileWatcher;
+import me.border.utilities.filewatcher.FileEvent;
+import me.border.utilities.filewatcher.FileListener;
+import me.border.utilities.filewatcher.FileWatcher;
 
 import java.io.File;
 

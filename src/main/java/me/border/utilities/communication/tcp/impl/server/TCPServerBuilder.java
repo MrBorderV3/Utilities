@@ -1,6 +1,6 @@
 package me.border.utilities.communication.tcp.impl.server;
 
-import me.border.utilities.communication.base.build.Builder;
+import me.border.utilities.interfaces.Builder;
 import me.border.utilities.communication.base.exception.BuilderException;
 import me.border.utilities.communication.tcp.core.TCPServer;
 

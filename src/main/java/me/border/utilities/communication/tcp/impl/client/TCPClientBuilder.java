@@ -1,6 +1,6 @@
 package me.border.utilities.communication.tcp.impl.client;
 
-import me.border.utilities.communication.base.build.Builder;
+import me.border.utilities.interfaces.Builder;
 import me.border.utilities.communication.base.exception.BuilderException;
 import me.border.utilities.communication.tcp.core.TCPClient;
 

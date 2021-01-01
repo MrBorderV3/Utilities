@@ -1,4 +1,4 @@
-package me.border.utilities.utils;
+package me.border.utilities.scheduler;
 
 public class AsyncTasker {
 

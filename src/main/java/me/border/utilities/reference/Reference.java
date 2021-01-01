@@ -1,12 +1,12 @@
-package me.border.utilities.utils.ref;
+package me.border.utilities.reference;
 
-public class StrongReference<T>{
+public class Reference<T>{
 
     private T ref;
 
-    public StrongReference(){ }
+    public Reference(){ }
 
-    public StrongReference(T ref){
+    public Reference(T ref){
         set(ref);
     }
 

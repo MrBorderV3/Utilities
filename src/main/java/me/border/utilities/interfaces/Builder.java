@@ -1,4 +1,4 @@
-package me.border.utilities.communication.base.build;
+package me.border.utilities.interfaces;
 
 import me.border.utilities.communication.base.exception.BuilderException;
 

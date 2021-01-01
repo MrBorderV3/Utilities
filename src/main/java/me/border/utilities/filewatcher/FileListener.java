@@ -1,7 +1,11 @@
-package me.border.utilities.file.watcher;
+package me.border.utilities.filewatcher;
 
 import java.util.EventListener;
 
+/**
+ * Function interface to listen for events whenever a file is created/modified/deleted at a {@link FileWatcher} initialized directory
+ * @see FileWatcher
+ */
 public interface FileListener extends EventListener {
 
     /**

@@ -1,35 +1,38 @@
 package me.border.utilities.cache;
 
-public interface ICache<K> {
+import me.border.utilities.terminable.Terminable;
+
+public interface ICache<K> extends Terminable {
 
     /**
-     * Cache a cacheable object
+     * Cache a {@link Cacheable}
      *
      * @param key Object identifier
-     * @param value The cacheable object to cache
+     * @param value The {@link Cacheable} to cache
      */
     void cache(K key, Cacheable value);
 
     /**
-     * Get a cacheable object from the cache
+     * Get a {@link Cacheable} from the cache with the corresponding identifier
      *
      * @param key The identifier
-     * @return The object, may be null
+     * @return The {@link Cacheable}
      */
-    Cacheable getCache(K key);
+    Cacheable get(K key);
 
     /**
-     * Get a parsed cacheable object from the cache
+     * Get a parsed object from the cache with the corresponding identifier
+     * @see #get(K)
      *
      * @param key the identifier
-     * @return The object, may be null
+     * @return The parsed object
      */
-    Object getParsedCache(K key);
+    Object getParsed(K key);
 
     /**
-     * Delete an object from the cache
+     * Remove an object from the cache
      *
-     * @param key The object key
+     * @param key The object identifier
      */
-    void delete(K key);
+    void remove(K key);
 }

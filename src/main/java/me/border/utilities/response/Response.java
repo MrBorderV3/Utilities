@@ -1,12 +1,12 @@
-package me.border.utilities.utils;
+package me.border.utilities.response;
 
 public interface Response<T> {
 
-    public static <T> ImmuteableResponse<T> createImmuteable(boolean answer){
+    static <T> ImmuteableResponse<T> createImmuteable(boolean answer){
         return new ImmuteableResponse<>(answer);
     }
 
-    public static <T> ImmuteableResponse<T> createImmuteable(boolean answer, T context){
+    static <T> ImmuteableResponse<T> createImmuteable(boolean answer, T context){
         return new ImmuteableResponse<>(answer, context);
     }
 

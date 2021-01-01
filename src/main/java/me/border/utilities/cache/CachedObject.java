@@ -1,41 +1,45 @@
 package me.border.utilities.cache;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class CachedObject implements Cacheable {
-    private Date dateOfExpiration = null;
-    public Object object;
+    public final Object object;
+    private long timeOfExpiration = -1;
+
     private int hash = 0;
 
-    public CachedObject(Object obj, int minutesToLive) {
-        if (obj == null){
-            throw new NullPointerException("Object cant be null");
-        }
+    public CachedObject(Object obj){
+        this(obj, 30, TimeUnit.MINUTES);
+    }
+
+    public CachedObject(Object obj, int timeToLiveMinutes){
+        this(obj, timeToLiveMinutes, TimeUnit.MINUTES);
+    }
+
+    public CachedObject(Object obj, long timeToLive, TimeUnit tu) {
+        Objects.requireNonNull(obj, "Object cannot be null");
         this.object = obj;
-        // minutesToLive of 0 means it lives on indefinitely.
-        if (minutesToLive != 0) {
-            dateOfExpiration = new Date();
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(dateOfExpiration);
-            cal.add(Calendar.MINUTE, minutesToLive);
-            dateOfExpiration = cal.getTime();
+
+        if (timeToLive != 0) {
+            long millisToLive = tu.toMillis(timeToLive);
+            this.timeOfExpiration = System.currentTimeMillis() + millisToLive;
         }
     }
 
+    @Override
     public boolean isExpired() {
-        if (dateOfExpiration != null) {
-            Date currentTime = new Date();
-            return dateOfExpiration.before(currentTime);
-        }
-
-        return false;
+        if (timeOfExpiration == -1)
+            return false;
+        return timeOfExpiration <= System.currentTimeMillis();
     }
 
+    @Override
     public Object getObject(){
         return object;
     }
 
+    @Override
     public boolean equals(Object o){
         if (o == this)
             return true;
@@ -47,9 +51,10 @@ public class CachedObject implements Cacheable {
         return false;
     }
 
+    @Override
     public int hashCode(){
-        if (this.hash == 0 || this.hash == 385){
-            this.hash = 475 + getObject().hashCode();
+        if (this.hash == 0){
+            this.hash = 59 * getObject().hashCode();
         }
 
         return hash;

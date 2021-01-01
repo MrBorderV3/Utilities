@@ -1,7 +1,6 @@
-package me.border.utilities.storage;
+package me.border.utilities.database.sql;
 
 import me.border.utilities.terminable.Terminable;
-import me.border.utilities.terminable.exception.TerminableClosedException;
 
 import java.sql.*;
 import java.util.Timer;
@@ -11,11 +10,11 @@ public abstract class IMySQLDB implements Terminable {
 
     protected Connection connection;
 
-    private String host;
-    private String database;
-    private String username;
-    private String password;
-    private int port;
+    private final String host;
+    private final String database;
+    private final String username;
+    private final String password;
+    private final int port;
 
     public IMySQLDB(String host, String database, String username, String password, int port) {
         this.host = host;
@@ -28,6 +27,10 @@ public abstract class IMySQLDB implements Terminable {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                if (isClosed()) {
+                    cancel();
+                    return;
+                }
                 ping();
             }
         }, 7200000, 7200000);
@@ -138,11 +141,6 @@ public abstract class IMySQLDB implements Terminable {
 
     private void ping() {
         executeQuery("/* ping */ SELECT 1;");
-    }
-
-    private void validate() throws TerminableClosedException {
-        if (isClosed())
-            throw new TerminableClosedException();
     }
 
     private void open() {

@@ -1,5 +1,7 @@
 package me.border.utilities.terminable;
 
+import me.border.utilities.terminable.exception.TerminableClosedException;
+
 /**
  * An extension of {@link AutoCloseable}
  */
@@ -29,5 +31,10 @@ public interface Terminable extends AutoCloseable {
         } catch (Exception ex){
             ex.printStackTrace();
         }
+    }
+
+    default void validate() throws TerminableClosedException {
+        if (isClosed())
+            throw new TerminableClosedException();
     }
 }
