@@ -1,4 +1,4 @@
-package me.border.utilities.communication.tcp.core;
+package me.border.utilities.communication.tcp.core.exception;
 
 import me.border.utilities.communication.base.exception.CommunicationException;
 

@@ -1,11 +1,15 @@
-package me.border.utilities.communication.tcp.impl.client;
+package me.border.utilities.communication.tcp.v2.client;
 
 import me.border.utilities.communication.tcp.core.TCPClient;
+import me.border.utilities.communication.tcp.core.base.TCPClientConnection;
 import me.border.utilities.communication.tcp.core.base.TCPServerConnection;
+import me.border.utilities.communication.tcp.core.exception.TCPStartupException;
 
 import java.net.Socket;
 
 public class TCPClientImpl implements TCPClient {
+    private boolean started = false;
+    private volatile boolean closed = false;
 
     private final TCPServerConnectionBuilder builder;
     private TCPServerConnection serverConnection;
@@ -20,7 +24,11 @@ public class TCPClientImpl implements TCPClient {
         builder.setClient(this);
     }
 
-    public void start() {
+    public void start() throws TCPStartupException {
+        validate();
+        if (started)
+            throw new TCPStartupException();
+        started = true;
         try {
             Socket server = new Socket(ip, port);
 
@@ -36,5 +44,17 @@ public class TCPClientImpl implements TCPClient {
     @Override
     public TCPServerConnection getServerConnection() {
         return serverConnection;
+    }
+
+    @Override
+    public void close() throws Exception {
+        validate();
+        closed = true;
+        serverConnection.close();
+    }
+
+    @Override
+    public boolean isClosed() {
+        return closed;
     }
 }

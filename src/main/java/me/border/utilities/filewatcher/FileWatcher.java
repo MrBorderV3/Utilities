@@ -58,17 +58,19 @@ public class FileWatcher implements Runnable, Terminable {
 
     @Override
     public void run() {
-        while (!stopped) {
-            try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
-                Path path = Paths.get(dir.getAbsolutePath());
-                path.register(watchService, ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE);
-                watchServices.add(watchService);
-                boolean poll = true;
-                while (poll) {
-                    poll = pollEvents(watchService);
+        while (!closed) {
+            if (!stopped) {
+                try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
+                    Path path = Paths.get(dir.getAbsolutePath());
+                    path.register(watchService, ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE);
+                    watchServices.add(watchService);
+                    boolean poll = true;
+                    while (poll) {
+                        poll = pollEvents(watchService);
+                    }
+                } catch (IOException | InterruptedException | ClosedWatchServiceException e) {
+                    Thread.currentThread().interrupt();
                 }
-            } catch (IOException | InterruptedException | ClosedWatchServiceException e) {
-                Thread.currentThread().interrupt();
             }
         }
     }

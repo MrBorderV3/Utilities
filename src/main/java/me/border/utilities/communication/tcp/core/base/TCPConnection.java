@@ -1,7 +1,7 @@
 package me.border.utilities.communication.tcp.core.base;
 
 import me.border.utilities.communication.base.Connection;
-import me.border.utilities.communication.tcp.core.TCPCommunicationException;
+import me.border.utilities.communication.tcp.core.exception.TCPCommunicationException;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -28,9 +28,4 @@ interface TCPConnection extends Connection {
      * @return The socket.
      */
     Socket getSocket();
-
-    /**
-     * Close this connection
-     */
-    void close() throws IOException;
 }

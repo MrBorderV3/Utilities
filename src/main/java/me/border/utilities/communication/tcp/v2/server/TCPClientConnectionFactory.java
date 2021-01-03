@@ -1,4 +1,4 @@
-package me.border.utilities.communication.tcp.impl.server;
+package me.border.utilities.communication.tcp.v2.server;
 
 import me.border.utilities.communication.base.ConnectionRunnable;
 import me.border.utilities.communication.base.build.ConnectionFactory;

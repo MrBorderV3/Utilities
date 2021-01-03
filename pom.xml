@@ -7,7 +7,6 @@
     <groupId>me.border</groupId>
     <artifactId>Utilities</artifactId>
     <version>2.1</version>
-    <packaging>jar</packaging>
 
     <name>Utilities</name>
 

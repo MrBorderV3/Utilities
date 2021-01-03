@@ -1,4 +1,4 @@
-package me.border.utilities.communication.tcp.impl.client;
+package me.border.utilities.communication.tcp.v2.client;
 
 import me.border.utilities.communication.base.ConnectionRunnable;
 import me.border.utilities.communication.base.exception.BuilderException;

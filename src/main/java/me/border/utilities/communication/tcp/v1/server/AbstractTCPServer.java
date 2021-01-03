@@ -1,9 +1,10 @@
-package me.border.utilities.communication.tcp.server;
+package me.border.utilities.communication.tcp.v1.server;
 
 import me.border.utilities.communication.base.build.ConnectionFactory;
 import me.border.utilities.communication.tcp.core.TCPServer;
-import me.border.utilities.communication.tcp.core.TCPCommunicationException;
+import me.border.utilities.communication.tcp.core.exception.TCPCommunicationException;
 import me.border.utilities.communication.tcp.core.base.TCPClientConnection;
+import me.border.utilities.terminable.Terminable;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,11 +13,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 /**
  * The class {@code AbstractTCPServer} is an abstract class of a TCP server in a two-way Server-Client communication
  */
 public abstract class AbstractTCPServer implements TCPServer {
+    private volatile boolean closed = false;
 
     public Set<TCPClientConnection> clientConnections = new HashSet<>();
 
@@ -44,6 +47,7 @@ public abstract class AbstractTCPServer implements TCPServer {
     }
 
     protected void start(ConnectionFactory<TCPClientConnection> factory){
+        validate();
         try {
             while (true) {
                 System.out.println("Listening on port " + port);
@@ -61,6 +65,7 @@ public abstract class AbstractTCPServer implements TCPServer {
     }
 
     protected void start(Class<? extends TCPClientConnection> clazz) {
+        validate();
         try {
             while (true) {
                 System.out.println("Listening on port " + port);
@@ -79,6 +84,7 @@ public abstract class AbstractTCPServer implements TCPServer {
 
     @Override
     public void sendAllClients(Object o) throws TCPCommunicationException {
+        validate();
         for (TCPClientConnection clientConnection : clientConnections) {
             clientConnection.sendObject(o);
         }
@@ -87,5 +93,21 @@ public abstract class AbstractTCPServer implements TCPServer {
     @Override
     public Set<TCPClientConnection> getConnections(){
         return clientConnections;
+    }
+
+    @Override
+    public void close() throws Exception {
+        validate();
+        closed = true;
+        for (TCPClientConnection clientConnection : clientConnections){
+            clientConnection.close();
+        }
+        clientConnections.clear();
+        this.ss.close();
+    }
+
+    @Override
+    public boolean isClosed() {
+        return closed;
     }
 }

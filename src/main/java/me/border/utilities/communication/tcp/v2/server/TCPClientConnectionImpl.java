@@ -1,7 +1,7 @@
-package me.border.utilities.communication.tcp.impl.server;
+package me.border.utilities.communication.tcp.v2.server;
 
 import me.border.utilities.communication.base.exception.FactoryException;
-import me.border.utilities.communication.tcp.core.TCPCommunicationException;
+import me.border.utilities.communication.tcp.core.exception.TCPCommunicationException;
 import me.border.utilities.communication.tcp.core.TCPServer;
 import me.border.utilities.communication.tcp.core.base.TCPClientConnection;
 
@@ -10,6 +10,7 @@ import java.net.Socket;
 
 public class TCPClientConnectionImpl implements TCPClientConnection {
 
+    private volatile boolean closed = false;
 
     private final ClientConnectionRunnable runnable;
     public Socket client;
@@ -40,6 +41,7 @@ public class TCPClientConnectionImpl implements TCPClientConnection {
 
     @Override
     public void sendObject(Object o) throws TCPCommunicationException {
+        validate();
         if (!(o instanceof Serializable)){
             throw new TCPCommunicationException(client, "Object [" + o.toString() + "] is not serializable and cannot be sent!");
         }
@@ -57,9 +59,16 @@ public class TCPClientConnectionImpl implements TCPClientConnection {
     }
 
     @Override
-    public void close() throws IOException{
+    public void close() throws Exception {
+        validate();
+        closed = true;
         in.close();
         out.close();
         client.close();
+    }
+
+    @Override
+    public boolean isClosed() {
+        return closed;
     }
 }

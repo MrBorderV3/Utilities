@@ -1,36 +1,36 @@
-package me.border.utilities.communication.tcp.impl.server;
+package me.border.utilities.communication.tcp.v2.client;
 
 import me.border.utilities.communication.base.Connection;
 import me.border.utilities.communication.base.ConnectionRunnable;
-import me.border.utilities.communication.base.exception.FactoryException;
-import me.border.utilities.communication.tcp.core.TCPServer;
-import me.border.utilities.communication.tcp.core.base.TCPClientConnection;
+import me.border.utilities.communication.base.exception.BuilderException;
+import me.border.utilities.communication.tcp.core.TCPClient;
+import me.border.utilities.communication.tcp.core.base.TCPServerConnection;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public abstract class ClientConnectionRunnable implements ConnectionRunnable {
+public abstract class ServerConnectionRunnable implements ConnectionRunnable {
 
-    private TCPServer server;
-    private TCPClientConnection connection;
+    private TCPClient client;
+    private TCPServerConnection connection;
 
     private Socket socket;
     private OutputStream out;
     private InputStream in;
 
-    public void setServer(TCPServer server) {
-        this.server = server;
+    public void setClient(TCPClient client) {
+        this.client = client;
     }
 
     @Override
-    public void setConnection(Connection connection) throws FactoryException {
-        if (!(connection instanceof TCPClientConnection)){
-            throw new FactoryException("Invalid connection given at runnable");
+    public void setConnection(Connection connection) throws BuilderException {
+        if (!(connection instanceof TCPServerConnection)){
+            throw new BuilderException("Invalid connection given at runnable");
         }
 
-        this.connection = (TCPClientConnection) connection;
+        this.connection = (TCPServerConnection) connection;
     }
 
     @Override
@@ -48,8 +48,8 @@ public abstract class ClientConnectionRunnable implements ConnectionRunnable {
         this.socket = socket;
     }
 
-    public TCPServer getServer() {
-        return server;
+    public TCPClient getClient() {
+        return client;
     }
 
     @Override
@@ -77,6 +77,5 @@ public abstract class ClientConnectionRunnable implements ConnectionRunnable {
         in.close();
         out.close();
         socket.close();
-        server.getConnections().remove(connection);
     }
 }

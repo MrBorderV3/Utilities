@@ -1,4 +1,4 @@
-package me.border.utilities.communication.tcp.impl.server;
+package me.border.utilities.communication.tcp.v2.server;
 
 import me.border.utilities.interfaces.Builder;
 import me.border.utilities.communication.base.exception.BuilderException;

@@ -1,30 +1,42 @@
 package me.border.utilities.example;
 
-import me.border.utilities.communication.tcp.client.AbstractTCPClient;
-import me.border.utilities.communication.tcp.client.AbstractTCPServerConnection;
+import me.border.utilities.communication.base.exception.BuilderException;
+import me.border.utilities.communication.base.exception.CommunicationException;
+import me.border.utilities.communication.tcp.core.TCPClient;
+import me.border.utilities.communication.tcp.core.exception.TCPStartupException;
+import me.border.utilities.communication.tcp.v2.client.ServerConnectionRunnable;
+import me.border.utilities.communication.tcp.v2.client.TCPClientBuilder;
 
 import java.io.IOException;
-import java.net.Socket;
 
-public class ExampleTCPClientV2 extends AbstractTCPClient {
-    public ExampleTCPClientV2(String ip, int port) {
-        super(ip, port);
+public class ExampleTCPClientV2 {
+
+    private TCPClient client;
+
+    private ExampleTCPClientV2(String ip, int port) {
+        try {
+            client = new TCPClientBuilder().setIp(ip).setPort(port).setRunnable(new ServerConnectionRunnable() {
+                @Override
+                public void run() {
+                    try {
+                        getConnection().sendObject("Example");
+                    } catch (CommunicationException e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }).build();
+        } catch (BuilderException ex) {
+            ex.printStackTrace();
+        }
     }
 
-    @Override
-    public void start() {
-        super.start(ExampleTCPServerConnection.class);
-    }
-
-    private class ExampleTCPServerConnection extends AbstractTCPServerConnection {
-
-        public ExampleTCPServerConnection(Socket server) throws IOException {
-            super(server);
-        }
-
-        @Override
-        public void run() {
-            System.out.println("I RAN\n" + server.toString());
-        }
+    public void start() throws TCPStartupException {
+        client.start();
     }
 }

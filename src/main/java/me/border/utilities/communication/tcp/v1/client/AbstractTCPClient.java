@@ -1,4 +1,4 @@
-package me.border.utilities.communication.tcp.client;
+package me.border.utilities.communication.tcp.v1.client;
 
 import me.border.utilities.communication.base.build.ConnectionBuilder;
 import me.border.utilities.communication.tcp.core.TCPClient;
@@ -10,6 +10,7 @@ import java.net.Socket;
  * The class {@code AbstractTCPClient} is an abstract class of a client in a two-way Server-Client communication
  */
 public abstract class AbstractTCPClient implements TCPClient {
+    private volatile boolean closed = false;
 
     protected TCPServerConnection serverConnection;
     protected Socket server;
@@ -23,6 +24,7 @@ public abstract class AbstractTCPClient implements TCPClient {
     }
 
     protected void start(ConnectionBuilder<TCPServerConnection> builder) {
+        validate();
         try {
             this.server = new Socket(ip, port);
 
@@ -34,6 +36,7 @@ public abstract class AbstractTCPClient implements TCPClient {
     }
 
     protected void start(Class<? extends TCPServerConnection> clazz) {
+        validate();
         try {
             this.server = new Socket(ip, port);
 
@@ -48,5 +51,18 @@ public abstract class AbstractTCPClient implements TCPClient {
     @Override
     public TCPServerConnection getServerConnection() {
         return serverConnection;
+    }
+
+    @Override
+    public void close() throws Exception {
+        validate();
+        closed = true;
+        serverConnection.close();
+        server.close();
+    }
+
+    @Override
+    public boolean isClosed() {
+        return closed;
     }
 }

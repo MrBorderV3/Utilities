@@ -7,7 +7,7 @@ import me.border.utilities.terminable.exception.TerminableClosedException;
 /**
  * Represents a {@link Terminable} made up of several other {@link AutoCloseable}s.
  *
- * The {@link #close()} method closes in LIFO (Last-In-First-Out) order.
+ * The {@link CompositeTerminableImpl#close()} method closes in LIFO (Last-In-First-Out) order.
  */
 public interface CompositeTerminable extends Terminable {
     /**
