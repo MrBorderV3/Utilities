@@ -11,6 +11,8 @@ public interface TCPClient extends Terminable {
 
     /**
      * Start the client and once connected to a server construct a connection {@link TCPServerConnection}
+     *
+     * @throws TCPStartupException If the startup has failed.
      */
     void start() throws TCPStartupException;
 

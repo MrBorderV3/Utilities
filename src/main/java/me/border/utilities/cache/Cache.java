@@ -22,7 +22,7 @@ public interface Cache<K> extends Terminable {
 
     /**
      * Get a parsed object from the cache with the corresponding identifier
-     * @see #get(K)
+     * {@link #get(Object)}
      *
      * @param key the identifier
      * @return The parsed object

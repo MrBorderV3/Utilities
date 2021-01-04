@@ -18,7 +18,7 @@ public interface Connection extends Runnable, Terminable {
      * @param object The object to send to the other connection.
      * @throws CommunicationException If an {@link IOException} is thrown during the sending, the {@link CommunicationException}
      * will encapsulate the {@link IOException}.
-     * The exception will also be thrown if {@param object} is not serializable.
+     * The exception will also be thrown if {@code object} is not serializable.
      */
     void sendObject(Object object) throws CommunicationException;
 }

@@ -178,7 +178,7 @@ public class FileWatcher implements Runnable, Terminable {
     }
 
     /**
-     * Stop & Close this watcher and clear all attached {@link FileWatcher}s and {@link WatchService}s.
+     * Stop and Close this watcher and clear all attached {@link FileWatcher}s and {@link WatchService}s.
      */
     @Override
     public void close() throws Exception {

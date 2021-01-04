@@ -97,6 +97,7 @@ public interface CompositeTerminable extends Terminable {
      * @see #with(AutoCloseable)
      *
      * @param closeable the terminable to bind
+     * @param <T> The type of the closeable
      * @return The closeable
      */
     default <T extends AutoCloseable> T bind(T closeable) {

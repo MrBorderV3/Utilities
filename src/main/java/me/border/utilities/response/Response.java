@@ -33,11 +33,15 @@ public interface Response<T> {
 
     /**
      * Set the response's answer
+     *
+     * @param b The answer
      */
     void setAnswer(boolean b);
 
     /**
      * Set the response's context
+     *
+     * @param t The context
      */
     void setContext(T t);
 }
