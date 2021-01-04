@@ -1,5 +1,8 @@
 package me.border.utilities.scheduler;
 
+/**
+ * Utility class to easily run async tasks.
+ */
 public class AsyncTasker {
 
     /**

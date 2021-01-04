@@ -1,10 +1,21 @@
 package me.border.utilities.scheduler;
 
+import me.border.utilities.interfaces.Builder;
+
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-public class SchedulerBuilder {
+/**
+ * A {@link Builder} class to allow easier creation of {@link Timer} tasks, can be used both async on the predetermined {@code timer} thread
+ * or create a new timer if chosen async just for that task.
+ */
+public class TaskBuilder implements Builder<Timer> {
+    private TaskBuilder() { }
+
+    public static TaskBuilder builder(){
+        return new TaskBuilder();
+    }
 
     private static final Timer timer = new Timer(true);
 
@@ -14,39 +25,39 @@ public class SchedulerBuilder {
     private long after;
     private boolean timerThread = true;
 
-    public SchedulerBuilder async(){
+    public TaskBuilder async(){
         this.timerThread = false;
         return this;
     }
 
-    public SchedulerBuilder sync(){
+    public TaskBuilder sync(){
         this.timerThread = true;
         return this;
     }
 
-    public SchedulerBuilder every(long every, TimeUnit tu){
+    public TaskBuilder every(long every, TimeUnit tu){
         this.every = tu.toMillis(every);
         type = Type.REPEATING;
         return this;
     }
 
-    public SchedulerBuilder after(long after, TimeUnit tu){
+    public TaskBuilder after(long after, TimeUnit tu){
         this.after = tu.toMillis(after);
         type = Type.SCHEDULED;
         return this;
     }
 
-    public SchedulerBuilder task(TimerTask task){
+    public TaskBuilder task(TimerTask task){
         this.task = task;
         return this;
     }
 
-    public SchedulerBuilder type(Type type){
+    public TaskBuilder type(Type type){
         this.type = type;
         return this;
     }
 
-    public Timer run(){
+    public Timer build(){
         if (timerThread) {
             switch (type) {
                 case REPEATING:
