@@ -26,7 +26,7 @@ public class FileWatcher implements Runnable, Terminable {
 
     private final List<WatchService> watchServices = new ArrayList<>();
     // All the watchers that were started as a result from this watcher
-    private final List<FileWatcher> watchers = new ArrayList<>();
+    private final List<FileWatcher> childWatchers = new ArrayList<>();
 
     private volatile boolean closed = false;
     private volatile boolean stopped = false;
@@ -107,7 +107,7 @@ public class FileWatcher implements Runnable, Terminable {
                 FileWatcher fileWatcher = new FileWatcher(file);
                 fileWatcher.setListeners(listeners);
                 fileWatcher.watch();
-                watchers.add(fileWatcher);
+                childWatchers.add(fileWatcher);
             }
         } else if (kind == ENTRY_MODIFY) {
             for (FileListener listener : listeners) {
@@ -163,7 +163,7 @@ public class FileWatcher implements Runnable, Terminable {
     }
 
     public List<FileWatcher> getWatchers() {
-        return Collections.unmodifiableList(watchers);
+        return Collections.unmodifiableList(childWatchers);
     }
 
     /**
@@ -187,8 +187,8 @@ public class FileWatcher implements Runnable, Terminable {
         for (int i = 0; i < watchServices.size(); i++){
             watchServices.remove(i).close();
         }
-        for (int i = 0; i < watchers.size(); i++){
-            watchers.remove(i).close();
+        for (int i = 0; i < childWatchers.size(); i++){
+            childWatchers.remove(i).close();
         }
     }
 
