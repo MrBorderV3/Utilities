@@ -1,13 +1,14 @@
 package me.border.utilities.cache;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class ExpiringCache<K> implements Cache<K> {
     private final Map<K, Cacheable> cacheHashMap = new HashMap<>();
-    private Thread cleanUpThread;
+    private final Thread cleanUpThread;
 
     private volatile boolean closed = false;
 
@@ -15,31 +16,32 @@ public class ExpiringCache<K> implements Cache<K> {
         this(30, TimeUnit.SECONDS);
     }
 
-    public ExpiringCache(long sleepTime, TimeUnit tu){
-        try {
-            cleanUpThread = new Thread(() -> {
-                long sleepTimeInMillis = tu.toMillis(sleepTime);
-                try {
-                    while (!closed) {
-                        Set<K> keySet = cacheHashMap.keySet();
-                        for (K key : keySet) {
-                            Cacheable value = cacheHashMap.get(key);
-                            if (value.isExpired()) {
-                                cacheHashMap.remove(key);
-                            }
+    @SuppressWarnings("BusyWait")
+    public ExpiringCache(long sleepTime, TimeUnit tu) {
+        cleanUpThread = new Thread(() -> {
+            long sleepTimeInMillis = tu.toMillis(sleepTime);
+            try {
+                while (!closed) {
+                    Set<K> keySet = cacheHashMap.keySet();
+                    Set<K> remove = new HashSet<>();
+                    for (K key : keySet) {
+                        Cacheable value = cacheHashMap.get(key);
+                        if (value.isExpired()) {
+                            remove.add(key);
                         }
-                        Thread.sleep(sleepTimeInMillis);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+
+                    for (K key : remove){
+                        cacheHashMap.remove(key);
+                    }
+                    Thread.sleep(sleepTimeInMillis);
                 }
-            });
-            cleanUpThread.setDaemon(true);
-            cleanUpThread.setPriority(Thread.MIN_PRIORITY);
-            cleanUpThread.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            } catch (InterruptedException ignored) {
+            }
+        });
+        cleanUpThread.setDaemon(true);
+        cleanUpThread.setPriority(Thread.MIN_PRIORITY);
+        cleanUpThread.start();
     }
 
     @Override
