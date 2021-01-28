@@ -9,15 +9,15 @@ public class CachedObject implements Cacheable {
 
     private int hash = 0;
 
-    public CachedObject(Object obj){
+    protected CachedObject(Object obj){
         this(obj, 30, TimeUnit.MINUTES);
     }
 
-    public CachedObject(Object obj, int timeToLiveMinutes){
+    protected CachedObject(Object obj, int timeToLiveMinutes){
         this(obj, timeToLiveMinutes, TimeUnit.MINUTES);
     }
 
-    public CachedObject(Object obj, long timeToLive, TimeUnit tu) {
+    protected CachedObject(Object obj, long timeToLive, TimeUnit tu) {
         Objects.requireNonNull(obj, "Object cannot be null");
         this.object = obj;
 

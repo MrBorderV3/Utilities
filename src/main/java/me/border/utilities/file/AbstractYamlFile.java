@@ -9,24 +9,38 @@ import java.util.Map;
 
 public abstract class AbstractYamlFile {
 
-    private String fileName;
-    private File file;
-    private File path;
+    private final String name;
+    private final File file;
     public Map<String, Object> values = new LinkedHashMap<>();
 
-    public AbstractYamlFile(String fileName, File path) {
-        this.fileName = fileName;
-        this.path = path;
+
+    /**
+     * Construct a new Yaml File object.
+     *
+     * @param name The name of the file.
+     * @param path The path for the file.
+     */
+    public AbstractYamlFile(String name, File path) {
+        this.name = name;
         if (!path.exists()){
             path.mkdirs();
         }
-        this.file = new File(path, this.fileName + ".yml");
+        this.file = new File(path, this.name + ".yml");
         Runtime.getRuntime().addShutdownHook(new Thread(this::save));
     }
 
+    /**
+     * Check if the yaml file contains a given path
+     *
+     * @param path The path to check
+     * @return {@code true} if the path exists {@code false} if the path does not exist
+     */
     public boolean contains(String path){
         return values.containsKey(path);
     }
+
+    // All of the following are get methods that return different types
+    // All of them use #get(String) as their base and just cast to whatever type is being used.
 
     public String getString(String path){
         return (String) get(path);
@@ -40,6 +54,14 @@ public abstract class AbstractYamlFile {
         return (T) get(path);
     }
 
+    // END OF GET METHODS
+
+    /**
+     * Get a value from the yaml file
+     *
+     * @param path Path in the yaml file
+     * @return The value associated with the given path
+     */
     public Object get(String path) {
         try {
             return values.get(path);
@@ -52,6 +74,9 @@ public abstract class AbstractYamlFile {
         values.put(path, value);
     }
 
+    /**
+     * Save the file
+     */
     public void save(){
         try {
             FileWriter fileWriter = new FileWriter(file);
@@ -65,6 +90,9 @@ public abstract class AbstractYamlFile {
         }
     }
 
+    /**
+     * Setup the file, create if doesn't exist or generate the values from the existing file if it does exist.
+     */
     public void setup(){
         try {
             if (!file.exists())
@@ -80,8 +108,8 @@ public abstract class AbstractYamlFile {
         }
     }
 
-    public String getFileName(){
-        return fileName;
+    public String getName(){
+        return name;
     }
 
     public File getFile(){

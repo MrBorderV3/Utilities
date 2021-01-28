@@ -6,18 +6,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public class ExpiringCache<K> implements Cache<K> {
+public class ExpiringCacheMap<K> implements CacheMap<K> {
     private final Map<K, Cacheable> cacheHashMap = new HashMap<>();
     private final Thread cleanUpThread;
 
     private volatile boolean closed = false;
 
-    public ExpiringCache(){
+    public ExpiringCacheMap(){
         this(30, TimeUnit.SECONDS);
     }
 
     @SuppressWarnings("BusyWait")
-    public ExpiringCache(long sleepTime, TimeUnit tu) {
+    public ExpiringCacheMap(long sleepTime, TimeUnit tu) {
         cleanUpThread = new Thread(() -> {
             long sleepTimeInMillis = tu.toMillis(sleepTime);
             try {
@@ -62,6 +62,12 @@ public class ExpiringCache<K> implements Cache<K> {
         } else {
             return object;
         }
+    }
+
+    @Override
+    public boolean containsKey(K key) {
+        validate();
+        return cacheHashMap.containsKey(key);
     }
 
     @Override
