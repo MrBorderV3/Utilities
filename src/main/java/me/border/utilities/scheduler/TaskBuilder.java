@@ -68,7 +68,7 @@ public class TaskBuilder implements Builder<Timer> {
                     break;
             }
         } else {
-            Timer timer = new Timer(true);
+            Timer timer = new Timer();
             switch (type) {
                 case REPEATING:
                     timer.scheduleAtFixedRate(task, after, every);
