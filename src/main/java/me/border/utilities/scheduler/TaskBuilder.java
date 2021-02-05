@@ -1,28 +1,38 @@
 package me.border.utilities.scheduler;
 
 import me.border.utilities.interfaces.Builder;
+import me.border.utilities.terminable.composite.CompositeTerminable;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
- * A {@link Builder} class to allow easier creation of {@link Timer} tasks, can be used both async on the predetermined {@code timer} thread
- * or create a new timer if chosen async just for that task.
+ * A {@link Builder} class to allow easier creation of {@link Task} tasks.
+ * Can be used sync on the predetermined timer thread or async on a new timer thread.
+ *
+ * @see Timer
  */
-public class TaskBuilder implements Builder<Timer> {
+public class TaskBuilder implements Builder<Task> {
     private TaskBuilder() { }
 
     public static TaskBuilder builder(){
         return new TaskBuilder();
     }
 
-    private static final Timer timer = new Timer(true);
+    private static final Task task = new Task(true);
 
     private Type type;
-    private TimerTask task;
+
+    private boolean bind = false;
+    private Set<CompositeTerminable> compositeTerminables;
+
+    private TimerTask timerTask;
     private long every;
     private long after;
+
     private boolean timerThread = true;
 
     public TaskBuilder async(){
@@ -47,8 +57,8 @@ public class TaskBuilder implements Builder<Timer> {
         return this;
     }
 
-    public TaskBuilder task(TimerTask task){
-        this.task = task;
+    public TaskBuilder task(TimerTask timerTask){
+        this.timerTask = timerTask;
         return this;
     }
 
@@ -57,30 +67,55 @@ public class TaskBuilder implements Builder<Timer> {
         return this;
     }
 
-    public Timer build(){
+    public TaskBuilder bind(CompositeTerminable compositeTerminable){
+        if (!bind){
+            bind = true;
+            compositeTerminables = new HashSet<>();
+        }
+        compositeTerminables.add(compositeTerminable);
+        return this;
+    }
+
+    public TaskBuilder unbind(CompositeTerminable compositeTerminable){
+        if (!bind)
+            return this;
+        compositeTerminables.remove(compositeTerminable);
+        if (compositeTerminables.isEmpty())
+            bind = false;
+        return this;
+    }
+
+    public Task build(){
+        if (bind){
+            compositeTerminables.forEach(ct -> ct.bind(task));
+        }
         if (timerThread) {
             switch (type) {
                 case REPEATING:
-                    timer.scheduleAtFixedRate(task, after, every);
+                    task.scheduleAtFixedRate(timerTask, after, every);
                     break;
                 case SCHEDULED:
-                    timer.schedule(task, after);
+                    task.schedule(timerTask, after);
                     break;
             }
         } else {
-            Timer timer = new Timer();
+            Task task = new Task();
             switch (type) {
                 case REPEATING:
-                    timer.scheduleAtFixedRate(task, after, every);
+                    task.scheduleAtFixedRate(timerTask, after, every);
                     break;
                 case SCHEDULED:
-                    timer.schedule(task, after);
+                    task.schedule(timerTask, after);
                     break;
             }
-            return timer;
+            return task;
         }
 
-        return timer;
+        return task;
+    }
+
+    public Type getType() {
+        return type;
     }
 
     public enum Type {
