@@ -19,7 +19,7 @@ public class TimeUtils {
      *
      * @return The difference between the times.
      */
-    public static long calculateTime(LocalDateTime time, int designatedHour, int designatedMinute, ChronoUnit timeUnit){
+    public static long calcDiff(LocalDateTime time, int designatedHour, int designatedMinute, ChronoUnit timeUnit){
         int year = time.getYear();
         Month month = time.getMonth();
         int dayOfMonth = time.getDayOfMonth();
@@ -55,10 +55,10 @@ public class TimeUtils {
      *
      * @return The difference between the times.
      */
-    public static long calculateTime(int hour, int minute, int designatedHour, int designatedMinute, ChronoUnit timeUnit){
+    public static long calcDiff(int hour, int minute, int designatedHour, int designatedMinute, ChronoUnit timeUnit){
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime time = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), hour, minute);
-        return calculateTime(time, designatedHour, designatedMinute, timeUnit);
+        return calcDiff(time, designatedHour, designatedMinute, timeUnit);
     }
 
     /**
@@ -70,9 +70,9 @@ public class TimeUtils {
      *
      * @return The difference between the times.
      */
-    public static long calculateTime(int designatedHour, int designatedMinute, ChronoUnit timeUnit){
+    public static long calcDiff(int designatedHour, int designatedMinute, ChronoUnit timeUnit){
         LocalDateTime now = LocalDateTime.now();
-        return calculateTime(now, designatedHour, designatedMinute, timeUnit);
+        return calcDiff(now, designatedHour, designatedMinute, timeUnit);
     }
 
     /**
@@ -83,8 +83,8 @@ public class TimeUtils {
      *
      * @return The difference between the times.
      */
-    public static long calculateTime(int designatedHour, int designatedMinute){
+    public static long calcDiff(int designatedHour, int designatedMinute){
         LocalDateTime now = LocalDateTime.now();
-        return calculateTime(now, designatedHour, designatedMinute, ChronoUnit.MILLIS);
+        return calcDiff(now, designatedHour, designatedMinute, ChronoUnit.MILLIS);
     }
 }
