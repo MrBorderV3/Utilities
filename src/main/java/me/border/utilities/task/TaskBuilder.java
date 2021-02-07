@@ -1,4 +1,4 @@
-package me.border.utilities.scheduler;
+package me.border.utilities.task;
 
 import me.border.utilities.interfaces.Builder;
 import me.border.utilities.terminable.composite.CompositeTerminable;

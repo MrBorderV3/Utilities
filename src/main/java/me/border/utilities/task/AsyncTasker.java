@@ -1,4 +1,4 @@
-package me.border.utilities.scheduler;
+package me.border.utilities.task;
 
 /**
  * Utility class to easily run async tasks.
