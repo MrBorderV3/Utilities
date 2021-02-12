@@ -24,7 +24,9 @@ public abstract class AbstractSerializedFile<I> {
             this.path.mkdirs();
         }
         if (this.file.exists()) {
-            this.item = load();
+            I temp = load();
+            if (temp != null)
+                this.item = temp;
         } else {
             try {
                 file.createNewFile();
