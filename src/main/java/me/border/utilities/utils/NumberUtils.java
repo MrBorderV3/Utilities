@@ -4,6 +4,13 @@ import java.text.DecimalFormat;
 
 public class NumberUtils {
 
+    /**
+     * Function to abbreviate a number
+     * Example: 1,000,000 gets abbreviated to 1M
+     *
+     * @param numValue The number to abbreviate
+     * @return The abbreviated number as a {@link String}
+     */
     public static String abbreviateNumber(double numValue) {
         char[] suffix = {' ', 'k', 'M', 'B', 'T', 'q', 'Q', 's', 'S'};
         int value = (int) Math.floor(Math.log10(numValue));
