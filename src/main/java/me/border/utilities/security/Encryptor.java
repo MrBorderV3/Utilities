@@ -10,12 +10,15 @@ import java.util.Base64;
 
 public class Encryptor {
 
+    private static final String KEY_TYPE = "AES";
+    private static final String CIPHER_TYPE = "AES/ECB/PKCS5Padding";
+    private static final Charset FORMAT = StandardCharsets.UTF_8;
+
     private SecretKey secretKey;
-    private Charset FORMAT = StandardCharsets.UTF_8;
 
     public Encryptor() {
         try {
-            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            KeyGenerator keyGen = KeyGenerator.getInstance(KEY_TYPE);
             keyGen.init(256);
             secretKey = keyGen.generateKey();
         } catch (NoSuchAlgorithmException e){
@@ -24,7 +27,7 @@ public class Encryptor {
     }
 
     public Encryptor(byte[] key){
-        secretKey = new SecretKeySpec(key, "AES");
+        secretKey = new SecretKeySpec(key, KEY_TYPE);
     }
 
     public Encryptor(SecretKey key){
@@ -33,7 +36,7 @@ public class Encryptor {
 
     public String encrypt(String str) {
         try {
-            Cipher eCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            Cipher eCipher = Cipher.getInstance(CIPHER_TYPE);
             eCipher.init(Cipher.ENCRYPT_MODE, secretKey);
 
             byte[] encryptedPassBytes = eCipher.doFinal(str.getBytes(FORMAT));
@@ -50,7 +53,7 @@ public class Encryptor {
 
     public String decrypt(String str) {
         try {
-            Cipher dCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            Cipher dCipher = Cipher.getInstance(CIPHER_TYPE);
             dCipher.init(Cipher.DECRYPT_MODE, secretKey);
 
             byte[] decoded = Base64.getDecoder().decode(str.getBytes(FORMAT));
