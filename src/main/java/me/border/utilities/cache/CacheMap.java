@@ -1,7 +1,5 @@
 package me.border.utilities.cache;
 
-import me.border.utilities.cache.Cacheable;
-import me.border.utilities.cache.CachedObject;
 import me.border.utilities.terminable.Terminable;
 
 import java.util.concurrent.TimeUnit;
@@ -72,4 +70,9 @@ public interface CacheMap<K> extends Terminable {
      * @param key The object identifier
      */
     void remove(K key);
+
+    /**
+     * Clear the cache
+     */
+    void clear();
 }

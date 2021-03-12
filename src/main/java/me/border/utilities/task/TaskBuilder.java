@@ -85,11 +85,12 @@ public class TaskBuilder implements Builder<Task> {
         return this;
     }
 
+    @Override
     public Task build(){
-        if (bind){
-            compositeTerminables.forEach(ct -> ct.bind(task));
-        }
         if (timerThread) {
+            if (bind){
+                compositeTerminables.forEach(ct -> ct.bind(task));
+            }
             switch (type) {
                 case REPEATING:
                     task.scheduleAtFixedRate(timerTask, after, every);
@@ -100,6 +101,9 @@ public class TaskBuilder implements Builder<Task> {
             }
         } else {
             Task task = new Task();
+            if (bind){
+                compositeTerminables.forEach(ct -> ct.bind(task));
+            }
             switch (type) {
                 case REPEATING:
                     task.scheduleAtFixedRate(timerTask, after, every);

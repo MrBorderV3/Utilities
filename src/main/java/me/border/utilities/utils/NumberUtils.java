@@ -8,14 +8,14 @@ import java.text.DecimalFormat;
 public class NumberUtils {
 
     /**
-     * Function to abbreviate a number using default suffixes {@code new char[]{' ', 'k', 'M', 'B', 'T', 'q', 'Q', 's', 'S'}}
+     * Function to abbreviate a number using default suffixes {@code new String[]{" ", "k", "M", "B", "T", "q", "Q", "s", "S"}}
      * Example: 1,000,000 gets abbreviated to 1M
      *
      * @param numValue The number to abbreviate
      * @return The abbreviated number as a {@link String}
      */
     public static String abbreviateNumber(double numValue){
-        return abbreviateNumber(numValue, new char[]{' ', 'k', 'M', 'B', 'T', 'q', 'Q', 's', 'S'});
+        return abbreviateNumber(numValue, new String[]{" ", "k", "M", "B", "T", "q", "Q", "s", "S"});
     }
 
     /**
@@ -26,7 +26,7 @@ public class NumberUtils {
      * @param suffixes The available suffixes, ordered by chronological order.
      * @return The abbreviated number as a {@link String}
      */
-    public static String abbreviateNumber(double numValue, char[] suffixes) {
+    public static String abbreviateNumber(double numValue, String[] suffixes) {
         int value = (int) Math.floor(Math.log10(numValue));
         int base = value / 3;
         if (value >= 3 && base < suffixes.length) {

@@ -85,6 +85,12 @@ public class ExpiringCacheMap<K> implements CacheMap<K> {
     }
 
     @Override
+    public void clear() {
+        validate();
+        cacheHashMap.clear();
+    }
+
+    @Override
     public void close() throws Exception {
         validate();
         cleanUpThread.interrupt();
