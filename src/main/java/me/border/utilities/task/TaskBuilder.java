@@ -16,12 +16,12 @@ import java.util.concurrent.TimeUnit;
  * @see Timer
  */
 public class TaskBuilder implements Builder<Task> {
-    private TaskBuilder() { }
 
     public static TaskBuilder builder(){
         return new TaskBuilder();
     }
 
+    //private static final ScheduledExecutorService pool = Executors.newScheduledThreadPool(1);
     private static final Task task = new Task(true);
 
     private Type type;
@@ -34,6 +34,8 @@ public class TaskBuilder implements Builder<Task> {
     private long after;
 
     private boolean timerThread = true;
+
+    private TaskBuilder() { }
 
     public TaskBuilder async(){
         this.timerThread = false;
@@ -104,6 +106,7 @@ public class TaskBuilder implements Builder<Task> {
             if (bind){
                 compositeTerminables.forEach(ct -> ct.bind(task));
             }
+
             switch (type) {
                 case REPEATING:
                     task.scheduleAtFixedRate(timerTask, after, every);

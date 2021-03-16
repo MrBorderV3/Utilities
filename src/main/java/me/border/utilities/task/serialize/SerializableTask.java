@@ -1,7 +1,6 @@
 package me.border.utilities.task.serialize;
 
 import me.border.utilities.task.Task;
-import me.border.utilities.terminable.Terminable;
 
 import java.io.Serializable;
 import java.util.Timer;
@@ -12,18 +11,41 @@ import java.util.TimerTask;
  *
  * @see TaskSerializer
  */
-public class SerializableTask implements Serializable, Terminable {
+public class SerializableTask implements Serializable {
 
-    private final transient Task task = new Task();
+    private static transient Task globalTask = new Task(true);
 
     private final long after;
     private final long every;
     private final int runs;
+    private final boolean ownTask;
 
+    /**
+     * Create a new SerializableTask with {@link #ownTask} set to false.
+     *
+     * @param after After how much time it should have its first run in milliseconds
+     * @param every How much time it should wait between runs in milliseconds
+     * @param runs How much times the task should execute
+     *
+     * @see #SerializableTask(long, long, int, boolean)
+     */
     protected SerializableTask(long after, long every, int runs){
+        this(after, every, runs, false);
+    }
+
+    /**
+     * Create a new SerializableTask
+     *
+     * @param after After how much time it should have its first run in milliseconds
+     * @param every How much time it should wait between runs in milliseconds
+     * @param runs How much times the task should execute
+     * @param ownTask Whether it should create its own {@link Task} for it or use the global one
+     */
+    protected SerializableTask(long after, long every, int runs, boolean ownTask){
         this.after = after;
         this.every = every;
         this.runs = runs;
+        this.ownTask = ownTask;
     }
 
     /**
@@ -31,11 +53,24 @@ public class SerializableTask implements Serializable, Terminable {
      *
      * @param runnable The runnable to run every time the task ticks.
      * @param endRunnable The runnable to run when the task resets/closes.
-     * @param close Whether to close the task after the runs amount is reached.
-     *        if {@code true} it will close, if {@code false} it will not.
+     * @param cancel Whether to cancel the task after the runs amount is reached.
+     *        if {@code true} it will cancel, if {@code false} it will not.
+     *
+     * @return The {@link Task} it used to schedule the {@link Runnable}s
      */
-    public void start(Runnable runnable, Runnable endRunnable, boolean close){
-        getBase().validate();
+    public Task start(Runnable runnable, Runnable endRunnable, boolean cancel){
+        Task task;
+        if (ownTask) {
+            task = new Task(true);
+        } else {
+            if (globalTask == null){
+                globalTask = new Task(true);
+            }
+
+            task = globalTask;
+        }
+        task.validate();
+
         task.scheduleAtFixedRate(new TimerTask() {
             private int runsLeft = runs;
 
@@ -46,27 +81,19 @@ public class SerializableTask implements Serializable, Terminable {
 
                 if (runsLeft == 0){
                     endRunnable.run();
-                    if (close){
-                        getBase().closeSilently();
+                    if (cancel){
+                        cancel();
                         return;
                     }
                     runsLeft = runs;
                 }
             }
         }, after, every);
-    }
 
-    public Task getBase() {
         return task;
     }
 
-    @Override
-    public void close() throws Exception {
-        getBase().close();
-    }
-
-    @Override
-    public boolean isClosed() {
-        return getBase().isClosed();
+    public Task getGlobalTask() {
+        return globalTask;
     }
 }
