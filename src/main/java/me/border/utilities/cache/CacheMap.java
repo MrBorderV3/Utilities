@@ -2,33 +2,7 @@ package me.border.utilities.cache;
 
 import me.border.utilities.terminable.Terminable;
 
-import java.util.concurrent.TimeUnit;
-
 public interface CacheMap<K> extends Terminable {
-
-    /**
-     * Add an object to the cache
-     *
-     * @param key Object identifier
-     * @param value The Object to cache
-     * @param timeToLiveMinutes Time for the object to live in minutes until it is removed from the cache
-     */
-    default void cache(K key, Object value, int timeToLiveMinutes){
-        cache(key, value, timeToLiveMinutes, TimeUnit.MINUTES);
-    }
-
-    /**
-     * Add an object to the cache
-     *
-     * @param key Object identifier
-     * @param value The object to cache
-     * @param timeToLive Time for the object to live until it is removed from the cache
-     * @param tu TimeUnit for the {@code timeToLive} param
-     */
-    default void cache(K key, Object value, int timeToLive, TimeUnit tu){
-        CachedObject cObj = new CachedObject(value, timeToLive, tu);
-        cache(key, cObj);
-    }
 
     /**
      * Add a {@link Cacheable} object to the cache

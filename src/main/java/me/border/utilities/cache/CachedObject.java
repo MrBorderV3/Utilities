@@ -9,15 +9,15 @@ public class CachedObject implements Cacheable {
 
     private int hash = 0;
 
-    protected CachedObject(Object obj){
+    public CachedObject(Object obj){
         this(obj, 30, TimeUnit.MINUTES);
     }
 
-    protected CachedObject(Object obj, int timeToLiveMinutes){
+    public CachedObject(Object obj, int timeToLiveMinutes){
         this(obj, timeToLiveMinutes, TimeUnit.MINUTES);
     }
 
-    protected CachedObject(Object obj, long timeToLive, TimeUnit tu) {
+    public CachedObject(Object obj, long timeToLive, TimeUnit tu) {
         Objects.requireNonNull(obj, "Object cannot be null");
         this.object = obj;
 
@@ -32,6 +32,11 @@ public class CachedObject implements Cacheable {
         if (timeOfExpiration == -1)
             return false;
         return timeOfExpiration <= System.currentTimeMillis();
+    }
+
+    @Override
+    public void add(long time, TimeUnit tu){
+        this.timeOfExpiration += tu.toMillis(time);
     }
 
     @Override
