@@ -1,7 +1,5 @@
 package me.border.utilities.utils;
 
-import com.google.gson.JsonElement;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -60,9 +58,5 @@ public class WebRequest {
             e.printStackTrace();
             return null;
         }
-    }
-
-    public static boolean isRequestLimit(JsonElement json) {
-        return json.getAsJsonObject().get("error") != null;
     }
 }

@@ -1,4 +1,7 @@
-package me.border.utilities.cache;
+package me.border.utilities.cache.impl;
+
+import me.border.utilities.cache.AbstractCacheMap;
+import me.border.utilities.cache.Cacheable;
 
 import java.util.concurrent.TimeUnit;
 

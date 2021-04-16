@@ -1,6 +1,6 @@
-package me.border.utilities.task.serialize;
+package me.border.utilities.scheduler.sync.serialize;
 
-import me.border.utilities.task.Task;
+import me.border.utilities.scheduler.sync.SyncTask;
 
 import java.io.Serializable;
 import java.util.Timer;
@@ -9,11 +9,11 @@ import java.util.TimerTask;
 /**
  * Wrapped Extension for {@link Timer} to add {@link Serializable} support.
  *
- * @see TaskSerializer
+ * @see SyncTaskSerializer
  */
-public class SerializableTask implements Serializable {
+public class SerializableSyncTask implements Serializable {
 
-    private static transient Task globalTask = new Task(true);
+    private static transient SyncTask globalSyncTask = new SyncTask(true);
 
     private final long after;
     private final long every;
@@ -27,9 +27,9 @@ public class SerializableTask implements Serializable {
      * @param every How much time it should wait between runs in milliseconds
      * @param runs How much times the task should execute
      *
-     * @see #SerializableTask(long, long, int, boolean)
+     * @see #SerializableSyncTask(long, long, int, boolean)
      */
-    protected SerializableTask(long after, long every, int runs){
+    protected SerializableSyncTask(long after, long every, int runs){
         this(after, every, runs, false);
     }
 
@@ -39,9 +39,9 @@ public class SerializableTask implements Serializable {
      * @param after After how much time it should have its first run in milliseconds
      * @param every How much time it should wait between runs in milliseconds
      * @param runs How much times the task should execute
-     * @param ownTask Whether it should create its own {@link Task} for it or use the global one
+     * @param ownTask Whether it should create its own {@link SyncTask} for it or use the global one
      */
-    protected SerializableTask(long after, long every, int runs, boolean ownTask){
+    protected SerializableSyncTask(long after, long every, int runs, boolean ownTask){
         this.after = after;
         this.every = every;
         this.runs = runs;
@@ -49,29 +49,29 @@ public class SerializableTask implements Serializable {
     }
 
     /**
-     * Starts the internal {@link Task}
+     * Starts the internal {@link SyncTask}
      *
      * @param runnable The runnable to run every time the task ticks.
      * @param endRunnable The runnable to run when the task resets/closes.
      * @param cancel Whether to cancel the task after the runs amount is reached.
      *        if {@code true} it will cancel, if {@code false} it will not.
      *
-     * @return The {@link Task} it used to schedule the {@link Runnable}s
+     * @return The {@link SyncTask} it used to schedule the {@link Runnable}s
      */
-    public Task start(Runnable runnable, Runnable endRunnable, boolean cancel){
-        Task task;
+    public SyncTask start(Runnable runnable, Runnable endRunnable, boolean cancel){
+        SyncTask syncTask;
         if (ownTask) {
-            task = new Task(true);
+            syncTask = new SyncTask(true);
         } else {
-            if (globalTask == null){
-                globalTask = new Task(true);
+            if (globalSyncTask == null){
+                globalSyncTask = new SyncTask(true);
             }
 
-            task = globalTask;
+            syncTask = globalSyncTask;
         }
-        task.validate();
+        syncTask.validate();
 
-        task.scheduleAtFixedRate(new TimerTask() {
+        syncTask.scheduleAtFixedRate(new TimerTask() {
             private int runsLeft = runs;
 
             @Override
@@ -90,10 +90,10 @@ public class SerializableTask implements Serializable {
             }
         }, after, every);
 
-        return task;
+        return syncTask;
     }
 
-    public Task getGlobalTask() {
-        return globalTask;
+    public SyncTask getGlobalTask() {
+        return globalSyncTask;
     }
 }

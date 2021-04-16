@@ -1,14 +1,13 @@
-package me.border.utilities.cache;
+package me.border.utilities.cache.impl;
 
 import me.border.utilities.cache.AbstractCacheMap;
 import me.border.utilities.cache.Cacheable;
-import me.border.utilities.cache.ExpiringCacheMap;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 /**
- * PredicateCacheMap works very similar to {@link ExpiringCacheMap} except it allows for a {@link Predicate} check too.
+ * PredicateCacheMap works very similarly to {@link ExpiringCacheMap} except it allows for a {@link Predicate} check too.
  * When the cleanup thread finds an expired {@link Cacheable} it will first run it through the given {@link Predicate}.
  * If the predicate returns {@code false} then the cacheable will be removed from the map normally.
  * If the predicate returns {@code true} time will be added to the cacheable using {@link Cacheable#add(long, TimeUnit)} with the values given in the constructor and it wont be removed.

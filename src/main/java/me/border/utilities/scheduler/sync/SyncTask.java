@@ -1,4 +1,4 @@
-package me.border.utilities.task;
+package me.border.utilities.scheduler.sync;
 
 import me.border.utilities.terminable.Terminable;
 
@@ -7,20 +7,20 @@ import java.util.Map;
 import java.util.Timer;
 
 /**
- * Extension for {@link Timer} to add {@link Terminable} support.
+ * Extension for {@link Timer} for sync tasks with {@link Terminable} support.
  */
-public class Task extends Timer implements Terminable {
-    private static final Map<Integer, Task> activeTasks = new HashMap<>();
+public class SyncTask extends Timer implements Terminable {
+    private static final Map<Integer, SyncTask> activeTasks = new HashMap<>();
     private static int lastId = 0;
 
     private volatile boolean closed = false;
     private final int id;
 
-    public Task(){
+    public SyncTask(){
         this(false);
     }
 
-    public Task(boolean isDaemon){
+    public SyncTask(boolean isDaemon){
         super(isDaemon);
         id = lastId++;
         activeTasks.put(id, this);
@@ -49,7 +49,7 @@ public class Task extends Timer implements Terminable {
         return id;
     }
 
-    public static Map<Integer, Task> getActiveTasks() {
+    public static Map<Integer, SyncTask> getActiveTasks() {
         return activeTasks;
     }
 }
