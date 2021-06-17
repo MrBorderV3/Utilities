@@ -120,6 +120,7 @@ public abstract class IMySQLDB implements Terminable {
 
     @Override
     public void close() {
+        validate();
         try {
             if (connection != null && !isClosed())
                 connection.close();
@@ -130,6 +131,8 @@ public abstract class IMySQLDB implements Terminable {
 
     @Override
     public boolean isClosed() {
+        if (connection == null)
+            return true;
         try {
             return connection.isClosed();
         } catch (SQLException e){
@@ -150,6 +153,7 @@ public abstract class IMySQLDB implements Terminable {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            close();
         }
     }
 
