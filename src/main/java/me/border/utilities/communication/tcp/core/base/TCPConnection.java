@@ -9,7 +9,7 @@ import java.net.Socket;
 /**
  * Represents a TCP connection to either a server or a client socket.
  */
-interface TCPConnection extends Connection {
+public interface TCPConnection extends Connection {
 
     /**
      * Send an object to the socket represented by this connection.
