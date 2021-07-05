@@ -17,6 +17,7 @@ public abstract class AbstractCacheMap<K> implements CacheMap<K> {
     protected AbstractCacheMap(long sleepTimeMillis, Predicate<Cacheable> predicate){
         cleanUpThread = new Thread(() -> {
             try {
+                Thread.sleep(sleepTimeMillis);
                 while (!closed) {
                     Set<K> keySet = cacheHashMap.keySet();
                     Set<K> remove = new HashSet<>();
