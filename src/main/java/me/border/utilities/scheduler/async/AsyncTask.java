@@ -2,16 +2,29 @@ package me.border.utilities.scheduler.async;
 
 import me.border.utilities.terminable.Terminable;
 
-public interface AsyncTask extends Runnable, Terminable {
+import java.util.concurrent.ScheduledFuture;
+
+public abstract class AsyncTask implements Runnable, Terminable {
+
+    private ScheduledFuture<?> internalFuture;
+
+    protected void setInternalFuture(ScheduledFuture<?> scheduledFuture){
+        this.internalFuture = scheduledFuture;
+    }
+
+    protected ScheduledFuture<?> getInternalFuture() {
+        return internalFuture;
+    }
 
     @Override
-    default void close() throws Exception {
+    public void close() throws Exception {
         validate();
         AsyncTaskBuilder.remove(this);
     }
 
     @Override
-    default boolean isClosed() {
-        return AsyncTaskBuilder.exists(this);
+    public boolean isClosed() {
+        return internalFuture.isCancelled();
     }
+
 }

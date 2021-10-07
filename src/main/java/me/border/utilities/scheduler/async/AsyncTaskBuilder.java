@@ -74,10 +74,10 @@ public class AsyncTaskBuilder implements Builder<AsyncTask> {
 
         switch (type) {
             case REPEATING:
-                pool.scheduleAtFixedRate(asyncTask, after, every, TimeUnit.MILLISECONDS);
+                asyncTask.setInternalFuture(pool.scheduleAtFixedRate(asyncTask, after, every, TimeUnit.MILLISECONDS));
                 break;
             case SCHEDULED:
-                pool.schedule(asyncTask, after, TimeUnit.MILLISECONDS);
+                asyncTask.setInternalFuture(pool.schedule(asyncTask, after, TimeUnit.MILLISECONDS));
                 break;
         }
 
@@ -89,11 +89,9 @@ public class AsyncTaskBuilder implements Builder<AsyncTask> {
     }
 
     static void remove(AsyncTask asyncTask){
+        asyncTask.getInternalFuture().cancel(true);
         pool.remove(asyncTask);
-    }
-
-    static boolean exists(AsyncTask asyncTask){
-        return pool.getQueue().contains(asyncTask);
+        pool.purge();
     }
 
     public enum Type {
