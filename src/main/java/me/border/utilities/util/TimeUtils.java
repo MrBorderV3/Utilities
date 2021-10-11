@@ -1,4 +1,4 @@
-package me.border.utilities.utils;
+package me.border.utilities.util;
 
 import java.time.LocalDateTime;
 import java.time.Month;

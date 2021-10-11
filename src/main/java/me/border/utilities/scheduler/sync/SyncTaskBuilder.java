@@ -1,6 +1,6 @@
 package me.border.utilities.scheduler.sync;
 
-import me.border.utilities.interfaces.Builder;
+import me.border.utilities.util.builder.Builder;
 import me.border.utilities.terminable.composite.CompositeTerminable;
 
 import java.util.HashSet;

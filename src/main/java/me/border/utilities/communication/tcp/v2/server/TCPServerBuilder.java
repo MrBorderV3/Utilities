@@ -1,7 +1,7 @@
 package me.border.utilities.communication.tcp.v2.server;
 
-import me.border.utilities.interfaces.Builder;
-import me.border.utilities.communication.base.exception.BuilderException;
+import me.border.utilities.util.builder.Builder;
+import me.border.utilities.util.builder.BuilderException;
 import me.border.utilities.communication.tcp.core.TCPServer;
 
 import java.io.*;

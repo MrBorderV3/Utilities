@@ -8,9 +8,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import me.border.utilities.ui.javafx.fxml.controllers.ConfirmBoxController;
 import me.border.utilities.ui.javafx.fxml.controllers.InputBoxController;
-import me.border.utilities.utils.URLUtils;
+import me.border.utilities.util.URLUtils;
 
 import java.io.IOException;
 

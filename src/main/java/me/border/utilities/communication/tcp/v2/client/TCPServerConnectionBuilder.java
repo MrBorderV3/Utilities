@@ -1,7 +1,7 @@
 package me.border.utilities.communication.tcp.v2.client;
 
 import me.border.utilities.communication.base.ConnectionRunnable;
-import me.border.utilities.communication.base.exception.BuilderException;
+import me.border.utilities.util.builder.BuilderException;
 import me.border.utilities.communication.base.build.ConnectionBuilder;
 import me.border.utilities.communication.tcp.core.TCPClient;
 import me.border.utilities.communication.tcp.core.base.TCPServerConnection;

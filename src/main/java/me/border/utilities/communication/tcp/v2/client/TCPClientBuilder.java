@@ -1,7 +1,7 @@
 package me.border.utilities.communication.tcp.v2.client;
 
-import me.border.utilities.interfaces.Builder;
-import me.border.utilities.communication.base.exception.BuilderException;
+import me.border.utilities.util.builder.Builder;
+import me.border.utilities.util.builder.BuilderException;
 import me.border.utilities.communication.tcp.core.TCPClient;
 
 public class TCPClientBuilder implements Builder<TCPClient> {

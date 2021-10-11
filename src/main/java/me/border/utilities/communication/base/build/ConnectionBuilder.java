@@ -2,7 +2,7 @@ package me.border.utilities.communication.base.build;
 
 import me.border.utilities.communication.base.Connection;
 import me.border.utilities.communication.base.ConnectionRunnable;
-import me.border.utilities.interfaces.Builder;
+import me.border.utilities.util.builder.Builder;
 
 import java.net.Socket;
 

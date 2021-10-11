@@ -1,6 +1,6 @@
 package me.border.utilities.example;
 
-import me.border.utilities.communication.base.exception.BuilderException;
+import me.border.utilities.util.builder.BuilderException;
 import me.border.utilities.communication.base.exception.CommunicationException;
 import me.border.utilities.communication.tcp.core.TCPClient;
 import me.border.utilities.communication.tcp.core.exception.TCPStartupException;

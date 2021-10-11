@@ -1,4 +1,4 @@
-package me.border.utilities.utils;
+package me.border.utilities.util;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
