@@ -1,10 +1,13 @@
 package me.border.utilities.database.sql;
 
+import me.border.utilities.scheduler.async.AsyncTask;
+import me.border.utilities.scheduler.async.AsyncTaskBuilder;
 import me.border.utilities.terminable.Terminable;
 
 import java.sql.*;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public abstract class IMySQLDB implements Terminable {
 
@@ -24,16 +27,20 @@ public abstract class IMySQLDB implements Terminable {
         this.port = port;
         open();
         Runtime.getRuntime().addShutdownHook(new Thread(this::close));
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                if (isClosed()) {
-                    cancel();
-                    return;
-                }
-                ping();
-            }
-        }, 7200000, 7200000);
+        AsyncTaskBuilder.builder()
+                .task(new AsyncTask() {
+                    @Override
+                    public void run() {
+                        if (isClosed()) {
+                            this.closeSilently();
+                            return;
+                        }
+                        ping();
+                    }
+                })
+                .after(7200000, TimeUnit.MILLISECONDS)
+                .every(7200000, TimeUnit.MILLISECONDS)
+                .build();
     }
 
     // MUST BE RUN IN AN ASYNC TASK
@@ -61,52 +68,76 @@ public abstract class IMySQLDB implements Terminable {
 
     // ASYNC BY DEFAULT
     public void execute(String sql) {
-        new Thread(() -> {
-            try {
-                Statement statement = connection.createStatement();
-                statement.execute(sql);
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        AsyncTaskBuilder.builder()
+                .after(0, TimeUnit.MILLISECONDS)
+                .task(new AsyncTask() {
+                    @Override
+                    public void run() {
+                        try {
+                            Statement statement = connection.createStatement();
+                            statement.execute(sql);
+                            statement.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .build();
     }
 
     // ASYNC BY DEFAULT
     public void execute(PreparedStatement ps) {
-        new Thread(() -> {
-            try {
-                ps.execute();
-                ps.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        AsyncTaskBuilder.builder()
+                .after(0, TimeUnit.MILLISECONDS)
+                .task(new AsyncTask() {
+                    @Override
+                    public void run() {
+                        try {
+                            ps.execute();
+                            ps.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .build();
     }
 
     // ASYNC BY DEFAULT
     public void executeUpdate(String sql) {
-        new Thread(() -> {
-            try {
-                Statement statement = connection.createStatement();
-                statement.executeUpdate(sql);
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        AsyncTaskBuilder.builder()
+                .after(0, TimeUnit.MILLISECONDS)
+                .task(new AsyncTask() {
+                    @Override
+                    public void run() {
+                        try {
+                            Statement statement = connection.createStatement();
+                            statement.executeUpdate(sql);
+                            statement.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .build();
     }
 
     // ASYNC BY DEFAULT
     public void executeUpdate(PreparedStatement ps) {
-        new Thread(() -> {
-            try {
-                ps.executeUpdate();
-                ps.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        AsyncTaskBuilder.builder()
+                .after(0, TimeUnit.MILLISECONDS)
+                .task(new AsyncTask() {
+                    @Override
+                    public void run() {
+                        try {
+                            ps.executeUpdate();
+                            ps.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .build();
     }
 
     public PreparedStatement createPreparedStatement(String sql) {
