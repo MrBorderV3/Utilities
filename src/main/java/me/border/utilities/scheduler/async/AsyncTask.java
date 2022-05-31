@@ -9,7 +9,6 @@ public abstract class AsyncTask implements Runnable, Terminable {
     private ScheduledFuture<?> internalFuture;
 
     protected void setInternalFuture(ScheduledFuture<?> scheduledFuture){
-        validate();
         this.internalFuture = scheduledFuture;
     }
 
